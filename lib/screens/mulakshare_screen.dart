@@ -1,0 +1,160 @@
+import 'package:flutter/material.dart';
+import 'tracing_screen.dart';
+import '../services/tts_service.dart';
+
+class MulakshareScreen extends StatelessWidget {
+  MulakshareScreen({super.key});
+
+  final List<Map<String, dynamic>> aksharGat = [
+    {
+      "title": "अक्षर गट १",
+      "letters": ["क", "म", "ल", "आ", "अ"],
+    },
+    {
+      "title": "अक्षर गट २",
+      "letters": ["प", "र", "च", "व", "इ", "ई"],
+    },
+    {
+      "title": "अक्षर गट ३",
+      "letters": ["ग", "य", "झ", "भ", "ओ", "औ"],
+    },
+    {
+      "title": "अक्षर गट ४",
+      "letters": ["ट", "थ", "घ", "ण", "ज", "ओ"],
+    },
+    {
+      "title": "अक्षर गट ५",
+      "letters": ["ब", "न", "द", "ध", "उ", "ऊ"],
+    },
+    {
+      "title": "अक्षर गट ६",
+      "letters": ["त", "स", "ह", "ए", "ऐ"],
+    },
+    {
+      "title": "अक्षर गट ७",
+      "letters": ["श", "ष", "क्ष", "ज्ञ", "ओ", "अं", "अः"],
+    },
+    {
+      "title": "अक्षर गट ८",
+      "letters": ["ड", "ढ", "फ", "ख", "छ"],
+    },
+    {
+      "title": "अक्षर गट ९",
+      "letters": ["ङ", "ञ", "ळ", "ऋ"],
+    },
+  ];
+
+  final List<Color> colors = [
+    Colors.orange,
+    Colors.green,
+    Colors.blue,
+    Colors.purple,
+    Colors.red,
+    Colors.teal,
+    Colors.deepOrange,
+    Colors.brown,
+    Colors.indigo,
+  ];
+
+  Widget letterGrid(BuildContext context, List<String> letters) {
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: letters.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 4,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+        childAspectRatio: .9,
+      ),
+      itemBuilder: (context, index) {
+        final letter = letters[index];
+
+        return Card(
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(15),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => TracingScreen(
+                    letter: letter,
+                  ),
+                ),
+              );
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  letter,
+                  style: const TextStyle(
+                    fontSize: 34,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                IconButton(
+                  icon: const Icon(
+                    Icons.volume_up,
+                    color: Colors.green,
+                  ),
+                  onPressed: () {
+                    TtsService.speak(letter);
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("मराठी मुळाक्षरे"),
+        centerTitle: true,
+      ),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: aksharGat.length,
+        itemBuilder: (context, index) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                decoration: BoxDecoration(
+                  color: colors[index],
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  aksharGat[index]["title"],
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              letterGrid(
+                context,
+                List<String>.from(aksharGat[index]["letters"]),
+              ),
+              const SizedBox(height: 28),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
