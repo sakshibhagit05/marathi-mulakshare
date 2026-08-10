@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../services/tts_service.dart';
 import 'tracing_screen.dart';
 
@@ -22,29 +23,53 @@ class NumbersScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("मराठी अंक"),
+        title: const Text(
+          "मराठी अंक",
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
       ),
+
       body: GridView.builder(
         padding: const EdgeInsets.all(16),
+
         itemCount: numbers.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+
+        gridDelegate:
+            const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 15,
           mainAxisSpacing: 15,
+          childAspectRatio: 0.9,
         ),
+
         itemBuilder: (context, index) {
+          final String number =
+              numbers[index]["number"]!;
+
+          final String word =
+              numbers[index]["word"]!;
+
           return InkWell(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(15),
 
             onTap: () {
-              TtsService.speak(numbers[index]["word"]!);
+              TtsService.speak(word);
 
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (_) => TracingScreen(
-                    letter: numbers[index]["number"]!,
+                    letter: number,
+
+                    // VERY IMPORTANT
+                    // Send complete Marathi number list
+                    groupLetters: numbers
+                        .map((item) => item["number"]!)
+                        .toList(),
                   ),
                 ),
               );
@@ -52,17 +77,22 @@ class NumbersScreen extends StatelessWidget {
 
             child: Card(
               elevation: 5,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
 
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(15),
+              ),
+
+              child: Column(
+                mainAxisAlignment:
+                    MainAxisAlignment.center,
+
+                children: [
                   Text(
-                    numbers[index]["number"]!,
+                    number,
+
                     style: const TextStyle(
-                      fontSize: 60,
+                      fontSize: 70,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -70,7 +100,8 @@ class NumbersScreen extends StatelessWidget {
                   const SizedBox(height: 12),
 
                   Text(
-                    numbers[index]["word"]!,
+                    word,
+
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,

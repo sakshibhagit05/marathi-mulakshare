@@ -23,29 +23,53 @@ class EnglishNumbersScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("English Numbers"),
+        title: const Text(
+          "English Numbers",
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
       ),
+
       body: GridView.builder(
         padding: const EdgeInsets.all(16),
+
         itemCount: numbers.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+
+        gridDelegate:
+            const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 15,
           mainAxisSpacing: 15,
+          childAspectRatio: 0.9,
         ),
+
         itemBuilder: (context, index) {
+          final String number =
+              numbers[index]["number"]!;
+
+          final String word =
+              numbers[index]["word"]!;
+
           return InkWell(
             borderRadius: BorderRadius.circular(15),
 
             onTap: () {
-              TtsService.speak(numbers[index]["word"]!);
+              TtsService.speak(word);
 
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (_) => EnglishTracingScreen(
-                    letter: numbers[index]["number"]!,
+                    letter: number,
+
+                    // VERY IMPORTANT
+                    // Send complete number list
+                    groupLetters: numbers
+                        .map((item) => item["number"]!)
+                        .toList(),
                   ),
                 ),
               );
@@ -53,17 +77,22 @@ class EnglishNumbersScreen extends StatelessWidget {
 
             child: Card(
               elevation: 6,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
 
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(15),
+              ),
+
+              child: Column(
+                mainAxisAlignment:
+                    MainAxisAlignment.center,
+
+                children: [
                   Text(
-                    numbers[index]["number"]!,
+                    number,
+
                     style: const TextStyle(
-                      fontSize: 55,
+                      fontSize: 65,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -71,7 +100,8 @@ class EnglishNumbersScreen extends StatelessWidget {
                   const SizedBox(height: 10),
 
                   Text(
-                    numbers[index]["word"]!,
+                    word,
+
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -83,6 +113,7 @@ class EnglishNumbersScreen extends StatelessWidget {
                   const Icon(
                     Icons.edit,
                     color: Colors.blue,
+                    size: 28,
                   ),
 
                   const SizedBox(height: 5),
@@ -90,6 +121,7 @@ class EnglishNumbersScreen extends StatelessWidget {
                   const Icon(
                     Icons.volume_up,
                     color: Colors.green,
+                    size: 28,
                   ),
                 ],
               ),
