@@ -21,7 +21,6 @@ class EnglishNumbersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Complete number list for Next button
     final List<String> allNumbers =
         numbers.map((item) => item["number"]!).toList();
 
@@ -67,9 +66,6 @@ class EnglishNumbersScreen extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (_) => EnglishTracingScreen(
                     letter: currentNumber,
-
-                    // IMPORTANT:
-                    // Send complete number list
                     groupLetters: allNumbers,
                   ),
                 ),
@@ -88,10 +84,6 @@ class EnglishNumbersScreen extends StatelessWidget {
                     MainAxisAlignment.center,
 
                 children: [
-                  // -------------------------------
-                  // NUMBER
-                  // -------------------------------
-
                   Text(
                     currentNumber,
                     style: const TextStyle(
@@ -101,10 +93,6 @@ class EnglishNumbersScreen extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 8),
-
-                  // -------------------------------
-                  // WORD
-                  // -------------------------------
 
                   Text(
                     currentWord,

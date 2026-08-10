@@ -37,7 +37,6 @@ class EnglishAlphabetScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Complete alphabet list for Next button
     final List<String> allLetters =
         letters.map((item) => item["letter"]!).toList();
 
@@ -83,9 +82,6 @@ class EnglishAlphabetScreen extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (_) => EnglishTracingScreen(
                     letter: currentLetter,
-
-                    // IMPORTANT:
-                    // Send complete alphabet list
                     groupLetters: allLetters,
                   ),
                 ),
@@ -104,10 +100,6 @@ class EnglishAlphabetScreen extends StatelessWidget {
                     MainAxisAlignment.center,
 
                 children: [
-                  // -------------------------------
-                  // LETTER
-                  // -------------------------------
-
                   Text(
                     currentLetter,
                     style: const TextStyle(
@@ -117,10 +109,6 @@ class EnglishAlphabetScreen extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 8),
-
-                  // -------------------------------
-                  // WORD
-                  // -------------------------------
 
                   Text(
                     currentWord,

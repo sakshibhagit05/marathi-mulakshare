@@ -8,8 +8,7 @@ import '../services/tts_service.dart';
 class EnglishTracingScreen extends StatefulWidget {
   final String letter;
 
-  // Complete list:
-  // A-Z OR 1-10
+  // A-Z किंवा 1-10 ची complete list
   final List<String> groupLetters;
 
   const EnglishTracingScreen({
@@ -26,10 +25,6 @@ class EnglishTracingScreen extends StatefulWidget {
 class _EnglishTracingScreenState
     extends State<EnglishTracingScreen> {
 
-  // =====================================================
-  // CURRENT INDEX
-  // =====================================================
-
   int get currentIndex {
     if (widget.groupLetters.isEmpty) {
       return -1;
@@ -38,28 +33,13 @@ class _EnglishTracingScreenState
     return widget.groupLetters.indexOf(widget.letter);
   }
 
-  // =====================================================
-  // NEXT AVAILABLE?
-  // =====================================================
-
   bool get hasNextLetter {
-    if (widget.groupLetters.isEmpty) {
-      return false;
-    }
-
     return currentIndex >= 0 &&
-        currentIndex <
-            widget.groupLetters.length - 1;
+        currentIndex < widget.groupLetters.length - 1;
   }
 
-  // =====================================================
-  // NEXT
-  // =====================================================
-
   void goToNext() {
-    if (!hasNextLetter) {
-      return;
-    }
+    if (!hasNextLetter) return;
 
     final String nextLetter =
         widget.groupLetters[currentIndex + 1];
@@ -69,34 +49,22 @@ class _EnglishTracingScreenState
       MaterialPageRoute(
         builder: (_) => EnglishTracingScreen(
           letter: nextLetter,
-
-          // IMPORTANT:
-          // Keep complete list
           groupLetters: widget.groupLetters,
         ),
       ),
     );
   }
 
-  // =====================================================
-  // BACK
-  // =====================================================
-
   void goBack() {
-    // Directly return to Alphabet / Numbers screen
-    Navigator.of(context).pop();
+    Navigator.pop(context);
   }
-
-  // =====================================================
-  // INITIAL SPEECH
-  // =====================================================
 
   @override
   void initState() {
     super.initState();
 
     Future.delayed(
-      const Duration(milliseconds: 500),
+      const Duration(milliseconds: 400),
       () {
         if (mounted) {
           TtsService.speak(widget.letter);
@@ -104,10 +72,6 @@ class _EnglishTracingScreenState
       },
     );
   }
-
-  // =====================================================
-  // BUILD
-  // =====================================================
 
   @override
   Widget build(BuildContext context) {
@@ -120,25 +84,13 @@ class _EnglishTracingScreenState
     return Scaffold(
       backgroundColor: const Color(0xFFF8F4E3),
 
-      // =================================================
-      // APP BAR
-      // =================================================
-
       appBar: AppBar(
-        backgroundColor:
-            const Color(0xFFFFF7FF),
-
+        backgroundColor: const Color(0xFFFFF7FF),
         elevation: 0,
-
         automaticallyImplyLeading: false,
-
-        // -------------------------------
-        // BACK
-        // -------------------------------
 
         leading: IconButton(
           onPressed: goBack,
-
           icon: const Icon(
             Icons.arrow_back,
             size: 32,
@@ -146,13 +98,8 @@ class _EnglishTracingScreenState
           ),
         ),
 
-        // -------------------------------
-        // TITLE
-        // -------------------------------
-
         title: Text(
           widget.letter,
-
           style: const TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
@@ -162,16 +109,14 @@ class _EnglishTracingScreenState
 
         centerTitle: true,
 
-        // -------------------------------
-        // NEXT + SOUND
-        // -------------------------------
-
         actions: [
+          // ==============================
           // NEXT BUTTON
+          // ==============================
+
           if (hasNextLetter)
             TextButton(
               onPressed: goToNext,
-
               child: const Text(
                 "Next →",
                 style: TextStyle(
@@ -182,12 +127,14 @@ class _EnglishTracingScreenState
               ),
             ),
 
-          // SPEAKER
+          // ==============================
+          // SOUND BUTTON
+          // ==============================
+
           IconButton(
             onPressed: () {
               TtsService.speak(widget.letter);
             },
-
             icon: const Icon(
               Icons.volume_up,
               size: 30,
@@ -199,135 +146,149 @@ class _EnglishTracingScreenState
         ],
       ),
 
-      // =================================================
-      // BODY
-      // =================================================
-
       body: SafeArea(
-        child: Column(
-          children: [
-            // ===========================================
-            // SMALL TITLE LETTER
-            // ===========================================
+        child: LayoutBuilder(
+          builder: (context, screenConstraints) {
 
-            const SizedBox(height: 5),
+            final double screenWidth =
+                screenConstraints.maxWidth;
 
-            Text(
-              widget.letter,
+            final double screenHeight =
+                screenConstraints.maxHeight;
 
-              style: const TextStyle(
-                fontSize: 80,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-            ),
+            return Column(
+              children: [
 
-            const SizedBox(height: 2),
+                // ==================================
+                // TOP LETTER
+                // ==================================
 
-            // ===========================================
-            // TRACING AREA
-            // ===========================================
-
-            Expanded(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final double availableWidth =
-                      constraints.maxWidth;
-
-                  final double availableHeight =
-                      constraints.maxHeight;
-
-                  // Keep tracing area large,
-                  // but fit inside mobile screen.
-                  double tracingSize =
-                      availableWidth * 0.82;
-
-                  if (tracingSize >
-                      availableHeight * 0.68) {
-                    tracingSize =
-                        availableHeight * 0.68;
-                  }
-
-                  // Minimum size
-                  if (tracingSize < 280) {
-                    tracingSize = 280;
-                  }
-
-                  return Stack(
-                    alignment: Alignment.center,
-
-                    children: [
-                      // =================================
-                      // WHITE TRACING PAPER
-                      // =================================
-
-                      Container(
-                        width: tracingSize,
-                        height: tracingSize,
-
-                        decoration:
-                            const BoxDecoration(
-                          color: Colors.white,
-                        ),
-
-                        child: Center(
-                          child: hasSvg
-
-                              // =========================
-                              // ALPHABET SVG
-                              // =========================
-
-                              ? SizedBox(
-                                  width:
-                                      tracingSize * 0.90,
-                                  height:
-                                      tracingSize * 0.90,
-
-                                  child: DashedLetter(
-                                    svgFile:
-                                        "english/$svg",
-                                  ),
-                                )
-
-                              // =========================
-                              // NUMBER
-                              // =========================
-
-                              : Text(
-                                  widget.letter,
-
-                                  style: TextStyle(
-                                    fontSize:
-                                        tracingSize *
-                                            0.70,
-
-                                    fontWeight:
-                                        FontWeight.bold,
-
-                                    color: Colors
-                                        .grey
-                                        .shade300,
-                                  ),
-                                ),
-                        ),
+                SizedBox(
+                  height: screenWidth < 600 ? 85 : 105,
+                  child: Center(
+                    child: Text(
+                      widget.letter,
+                      style: TextStyle(
+                        fontSize:
+                            screenWidth < 600 ? 70 : 85,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
                       ),
+                    ),
+                  ),
+                ),
 
-                      // =================================
-                      // DRAWING BOARD
-                      // =================================
+                // ==================================
+                // TRACING AREA
+                // ==================================
 
-                      SizedBox(
-                        width: tracingSize,
-                        height: tracingSize,
+                Expanded(
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
 
-                        child: DrawingBoard(),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ),
-          ],
+                      final double maxWidth =
+                          constraints.maxWidth - 24;
+
+                      final double maxHeight =
+                          constraints.maxHeight - 10;
+
+                      // Mobile मध्ये मोठे tracing area
+                      double tracingSize =
+                          maxWidth < maxHeight
+                              ? maxWidth
+                              : maxHeight;
+
+                      // Screen प्रमाणे size
+                      if (screenWidth < 600) {
+                        tracingSize =
+                            tracingSize.clamp(300.0, 520.0);
+                      } else {
+                        tracingSize =
+                            tracingSize.clamp(350.0, 650.0);
+                      }
+
+                      // उपलब्ध जागेपेक्षा मोठे होऊ नये
+                      tracingSize =
+                          tracingSize.clamp(
+                        280.0,
+                        maxWidth,
+                      );
+
+                      tracingSize =
+                          tracingSize.clamp(
+                        280.0,
+                        maxHeight,
+                      );
+
+                      return Center(
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+
+                            // =================================
+                            // WHITE TRACING PAPER
+                            // =================================
+
+                            Container(
+                              width: tracingSize,
+                              height: tracingSize,
+
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                    BorderRadius.circular(4),
+                              ),
+
+                              child: Center(
+                                child: hasSvg
+                                    ? SizedBox(
+                                        width:
+                                            tracingSize * 0.92,
+                                        height:
+                                            tracingSize * 0.92,
+
+                                        child: DashedLetter(
+                                          svgFile:
+                                              "english/$svg",
+                                        ),
+                                      )
+
+                                    // =========================
+                                    // NUMBERS
+                                    // =========================
+
+                                    : Text(
+                                        widget.letter,
+                                        style: TextStyle(
+                                          fontSize:
+                                              tracingSize * 0.72,
+                                          fontWeight:
+                                              FontWeight.bold,
+                                          color:
+                                              Colors.grey.shade300,
+                                        ),
+                                      ),
+                              ),
+                            ),
+
+                            // =================================
+                            // DRAWING BOARD
+                            // =================================
+
+                            SizedBox(
+                              width: tracingSize,
+                              height: tracingSize,
+                              child: DrawingBoard(),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
