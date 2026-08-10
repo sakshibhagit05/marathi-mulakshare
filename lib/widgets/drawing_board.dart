@@ -8,7 +8,8 @@ class DrawingBoard extends StatefulWidget {
       _DrawingBoardState();
 }
 
-class _DrawingBoardState extends State<DrawingBoard> {
+class _DrawingBoardState
+    extends State<DrawingBoard> {
   final List<Offset?> points = [];
 
   Color selectedColor = Colors.blue;
@@ -54,13 +55,13 @@ class _DrawingBoardState extends State<DrawingBoard> {
             color: isSelected
                 ? Colors.white
                 : Colors.black,
-            width: isSelected ? 4 : 2,
+            width: 3,
           ),
 
           boxShadow: const [
             BoxShadow(
-              color: Colors.black26,
-              blurRadius: 3,
+              color: Colors.black12,
+              blurRadius: 2,
             ),
           ],
         ),
@@ -76,16 +77,13 @@ class _DrawingBoardState extends State<DrawingBoard> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-
         // =================================================
         // DRAWING AREA
         // =================================================
 
         Positioned.fill(
           child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-
-            // ---------------- PAN START ----------------
+            behavior: HitTestBehavior.translucent,
 
             onPanStart: (details) {
               final RenderBox box =
@@ -101,8 +99,6 @@ class _DrawingBoardState extends State<DrawingBoard> {
               });
             },
 
-            // ---------------- PAN UPDATE ----------------
-
             onPanUpdate: (details) {
               final RenderBox box =
                   context.findRenderObject()
@@ -116,8 +112,6 @@ class _DrawingBoardState extends State<DrawingBoard> {
                 );
               });
             },
-
-            // ---------------- PAN END ----------------
 
             onPanEnd: (_) {
               setState(() {
@@ -137,7 +131,7 @@ class _DrawingBoardState extends State<DrawingBoard> {
         ),
 
         // =================================================
-        // COLOR PANEL
+        // COLOR BAR
         // =================================================
 
         Positioned(
@@ -147,8 +141,8 @@ class _DrawingBoardState extends State<DrawingBoard> {
 
           child: Container(
             padding: const EdgeInsets.symmetric(
-              horizontal: 10,
-              vertical: 8,
+              horizontal: 8,
+              vertical: 10,
             ),
 
             decoration: BoxDecoration(
@@ -161,53 +155,41 @@ class _DrawingBoardState extends State<DrawingBoard> {
                 BoxShadow(
                   color: Colors.black12,
                   blurRadius: 6,
-                  spreadRadius: 1,
+                  offset: Offset(0, 2),
                 ),
               ],
             ),
 
             child: SingleChildScrollView(
-              scrollDirection:
-                  Axis.horizontal,
+              scrollDirection: Axis.horizontal,
 
               child: Row(
                 children: [
-
                   colorButton(Colors.red),
-
                   colorButton(Colors.orange),
-
                   colorButton(Colors.yellow),
-
                   colorButton(Colors.green),
-
                   colorButton(Colors.blue),
-
                   colorButton(Colors.purple),
-
                   colorButton(Colors.brown),
-
                   colorButton(Colors.black),
 
-                  const SizedBox(width: 12),
-
-                  // ---------------- CLEAR ----------------
+                  const SizedBox(width: 8),
 
                   Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade100,
-                      shape: BoxShape.circle,
-                    ),
+                    width: 1,
+                    height: 35,
+                    color: Colors.grey.shade300,
+                  ),
 
-                    child: IconButton(
-                      onPressed: clear,
+                  const SizedBox(width: 8),
 
-                      icon: const Icon(
-                        Icons.refresh,
-                        size: 28,
-                      ),
+                  IconButton(
+                    onPressed: clear,
 
-                      tooltip: "Clear",
+                    icon: const Icon(
+                      Icons.refresh,
+                      size: 30,
                     ),
                   ),
                 ],
@@ -220,9 +202,9 @@ class _DrawingBoardState extends State<DrawingBoard> {
   }
 }
 
-// =======================================================
+// =====================================================
 // DRAW PAINTER
-// =======================================================
+// =====================================================
 
 class DrawPainter extends CustomPainter {
   final List<Offset?> points;
@@ -240,14 +222,9 @@ class DrawPainter extends CustomPainter {
   ) {
     final Paint paint = Paint()
       ..color = color
-
-      // Bigger stroke for children
-      ..strokeWidth = 10
-
+      ..strokeWidth = 9
       ..strokeCap = StrokeCap.round
-
       ..strokeJoin = StrokeJoin.round
-
       ..style = PaintingStyle.stroke;
 
     for (

@@ -37,12 +37,16 @@ class EnglishAlphabetScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Complete A-Z list
+    final List<String> allLetters =
+        letters.map((e) => e["letter"]!).toList();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           "English Alphabets",
           style: TextStyle(
-            fontSize: 24,
+            fontSize: 25,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -59,7 +63,7 @@ class EnglishAlphabetScreen extends StatelessWidget {
           crossAxisCount: 2,
           crossAxisSpacing: 15,
           mainAxisSpacing: 15,
-          childAspectRatio: 0.9,
+          childAspectRatio: 0.85,
         ),
 
         itemBuilder: (context, index) {
@@ -70,7 +74,7 @@ class EnglishAlphabetScreen extends StatelessWidget {
               letters[index]["word"]!;
 
           return InkWell(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(15),
 
             onTap: () {
               TtsService.speak(currentLetter);
@@ -81,11 +85,9 @@ class EnglishAlphabetScreen extends StatelessWidget {
                   builder: (_) => EnglishTracingScreen(
                     letter: currentLetter,
 
-                    // VERY IMPORTANT
-                    // Send complete alphabet list
-                    groupLetters: letters
-                        .map((item) => item["letter"]!)
-                        .toList(),
+                    // IMPORTANT
+                    // Send complete A-Z list
+                    groupLetters: allLetters,
                   ),
                 ),
               );
@@ -95,8 +97,7 @@ class EnglishAlphabetScreen extends StatelessWidget {
               elevation: 5,
 
               shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(15),
               ),
 
               child: Column(
@@ -104,27 +105,38 @@ class EnglishAlphabetScreen extends StatelessWidget {
                     MainAxisAlignment.center,
 
                 children: [
+                  // -----------------------------------
+                  // LETTER
+                  // -----------------------------------
+
                   Text(
                     currentLetter,
-
                     style: const TextStyle(
                       fontSize: 65,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
 
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 8),
+
+                  // -----------------------------------
+                  // WORD
+                  // -----------------------------------
 
                   Text(
                     word,
-
+                    textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
 
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 10),
+
+                  // -----------------------------------
+                  // EDIT ICON
+                  // -----------------------------------
 
                   const Icon(
                     Icons.edit,
@@ -134,10 +146,19 @@ class EnglishAlphabetScreen extends StatelessWidget {
 
                   const SizedBox(height: 5),
 
-                  const Icon(
-                    Icons.volume_up,
-                    color: Colors.green,
-                    size: 28,
+                  // -----------------------------------
+                  // SOUND ICON
+                  // -----------------------------------
+
+                  IconButton(
+                    icon: const Icon(
+                      Icons.volume_up,
+                      color: Colors.green,
+                      size: 30,
+                    ),
+                    onPressed: () {
+                      TtsService.speak(currentLetter);
+                    },
                   ),
                 ],
               ),

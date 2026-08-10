@@ -7,7 +7,7 @@ import '../widgets/drawing_board.dart';
 class EnglishTracingScreen extends StatelessWidget {
   final String letter;
 
-  // Complete alphabet / number list
+  // Complete A-Z or 1-10 list
   final List<String> groupLetters;
 
   const EnglishTracingScreen({
@@ -29,7 +29,7 @@ class EnglishTracingScreen extends StatelessWidget {
   }
 
   // =====================================================
-  // CHECK NEXT
+  // HAS NEXT
   // =====================================================
 
   bool get hasNextLetter {
@@ -69,7 +69,9 @@ class EnglishTracingScreen extends StatelessWidget {
   // =====================================================
 
   void goBack(BuildContext context) {
-    Navigator.of(context).pop();
+    // Directly return to the page from where
+    // tracing screen was opened.
+    Navigator.pop(context);
   }
 
   // =====================================================
@@ -88,16 +90,17 @@ class EnglishTracingScreen extends StatelessWidget {
       backgroundColor: const Color(0xFFF8F4E3),
 
       // =================================================
-      // TOP BAR
+      // APP BAR
       // =================================================
 
       appBar: AppBar(
         backgroundColor: const Color(0xFFFFF7FF),
         elevation: 0,
-
         automaticallyImplyLeading: false,
 
-        // ---------------- BACK ----------------
+        // -----------------------------------------------
+        // BACK
+        // -----------------------------------------------
 
         leading: IconButton(
           onPressed: () {
@@ -110,7 +113,9 @@ class EnglishTracingScreen extends StatelessWidget {
           ),
         ),
 
-        // ---------------- TITLE ----------------
+        // -----------------------------------------------
+        // TITLE
+        // -----------------------------------------------
 
         title: Text(
           letter,
@@ -123,7 +128,9 @@ class EnglishTracingScreen extends StatelessWidget {
 
         centerTitle: true,
 
-        // ---------------- NEXT ----------------
+        // -----------------------------------------------
+        // NEXT
+        // -----------------------------------------------
 
         actions: [
           if (hasNextLetter)
@@ -141,7 +148,7 @@ class EnglishTracingScreen extends StatelessWidget {
               ),
             ),
 
-          const SizedBox(width: 8),
+          const SizedBox(width: 4),
         ],
       ),
 
@@ -149,69 +156,83 @@ class EnglishTracingScreen extends StatelessWidget {
       // BODY
       // =================================================
 
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: const Color(0xFFF8F4E3),
-
-        child: Stack(
+      body: SafeArea(
+        child: Column(
           children: [
-
             // ===========================================
-            // LARGE DASHED LETTER / NUMBER
+            // SMALL CURRENT LETTER
             // ===========================================
 
-            Positioned.fill(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 15,
-                  right: 15,
-                  top: 10,
-                  bottom: 65,
-                ),
+            const SizedBox(height: 4),
 
-                child: Center(
-                  child: hasSvg
-                      ? SizedBox(
-                          width: double.infinity,
-                          height: double.infinity,
-
-                          child: DashedLetter(
-                            svgFile: "english/$svg",
-                          ),
-                        )
-
-                      // ================================
-                      // NUMBER
-                      // ================================
-
-                      : FittedBox(
-                          fit: BoxFit.contain,
-
-                          child: Text(
-                            letter,
-
-                            style: TextStyle(
-                              fontSize: 500,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey.shade300,
-                            ),
-                          ),
-                        ),
-                ),
+            Text(
+              letter,
+              style: const TextStyle(
+                fontSize: 70,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
               ),
             ),
 
+            const SizedBox(height: 4),
+
             // ===========================================
-            // DRAWING BOARD
+            // LARGE TRACING AREA
             // ===========================================
 
-            Positioned.fill(
+            Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 60,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
                 ),
-                child: DrawingBoard(),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    // -----------------------------------
+                    // ENGLISH ALPHABET SVG
+                    // -----------------------------------
+
+                    if (hasSvg)
+                      Positioned.fill(
+                        child: Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: DashedLetter(
+                            svgFile: "english/$svg",
+                          ),
+                        ),
+                      )
+
+                    // -----------------------------------
+                    // ENGLISH NUMBER
+                    // -----------------------------------
+
+                    else
+                      Positioned.fill(
+                        child: Center(
+                          child: FittedBox(
+                            fit: BoxFit.contain,
+                            child: Text(
+                              letter,
+                              style: TextStyle(
+                                fontSize: 500,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey.shade300,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+
+                    // -----------------------------------
+                    // DRAWING BOARD
+                    // -----------------------------------
+
+                    Positioned.fill(
+                      child: DrawingBoard(),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
