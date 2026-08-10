@@ -1,26 +1,63 @@
 import 'package:flutter/material.dart';
 
 class DrawingBoard extends StatefulWidget {
-  DrawingBoard({super.key});
+  const DrawingBoard({super.key});
 
   @override
-  State<DrawingBoard> createState() =>
-      _DrawingBoardState();
+  State<DrawingBoard> createState() => _DrawingBoardState();
 }
 
-class _DrawingBoardState
-    extends State<DrawingBoard> {
-  final List<Offset?> points = [];
+// =====================================================
+// DRAWING STROKE
+// =====================================================
+
+class DrawingStroke {
+  final List<Offset?> points;
+  final Color color;
+
+  DrawingStroke({
+    required this.points,
+    required this.color,
+  });
+}
+
+// =====================================================
+// DRAWING BOARD STATE
+// =====================================================
+
+class _DrawingBoardState extends State<DrawingBoard> {
+  final List<DrawingStroke> strokes = [];
 
   Color selectedColor = Colors.blue;
 
+  List<Offset?>? currentPoints;
+
   // =====================================================
-  // CLEAR DRAWING
+  // UNDO - REMOVE LAST STROKE
+  // =====================================================
+
+  void undo() {
+    if (strokes.isEmpty) {
+      return;
+    }
+
+    setState(() {
+      strokes.removeLast();
+    });
+  }
+
+  // =====================================================
+  // CLEAR - REMOVE EVERYTHING
   // =====================================================
 
   void clear() {
+    if (strokes.isEmpty) {
+      return;
+    }
+
     setState(() {
-      points.clear();
+      strokes.clear();
+      currentPoints = null;
     });
   }
 
@@ -29,8 +66,7 @@ class _DrawingBoardState
   // =====================================================
 
   Widget colorButton(Color color) {
-    final bool isSelected =
-        selectedColor == color;
+    final bool isSelected = selectedColor == color;
 
     return GestureDetector(
       onTap: () {
@@ -38,26 +74,19 @@ class _DrawingBoardState
           selectedColor = color;
         });
       },
-
       child: Container(
-        margin: const EdgeInsets.symmetric(
-          horizontal: 5,
-        ),
-
+        margin: const EdgeInsets.symmetric(horizontal: 5),
         width: 34,
         height: 34,
-
         decoration: BoxDecoration(
           color: color,
           shape: BoxShape.circle,
-
           border: Border.all(
             color: isSelected
                 ? Colors.white
                 : Colors.black,
             width: 3,
           ),
-
           boxShadow: const [
             BoxShadow(
               color: Colors.black12,
@@ -67,6 +96,20 @@ class _DrawingBoardState
         ),
       ),
     );
+  }
+
+  // =====================================================
+  // GET LOCAL POSITION
+  // =====================================================
+
+  Offset getLocalPosition(
+    BuildContext context,
+    Offset globalPosition,
+  ) {
+    final RenderBox box =
+        context.findRenderObject() as RenderBox;
+
+    return box.globalToLocal(globalPosition);
   }
 
   // =====================================================
@@ -85,72 +128,94 @@ class _DrawingBoardState
           child: GestureDetector(
             behavior: HitTestBehavior.translucent,
 
+            // ---------------------------------------------
+            // START STROKE
+            // ---------------------------------------------
+
             onPanStart: (details) {
-              final RenderBox box =
-                  context.findRenderObject()
-                      as RenderBox;
+              final Offset position =
+                  getLocalPosition(
+                context,
+                details.globalPosition,
+              );
 
               setState(() {
-                points.add(
-                  box.globalToLocal(
-                    details.globalPosition,
-                  ),
-                );
+                currentPoints = [position];
               });
             },
+
+            // ---------------------------------------------
+            // DRAW STROKE
+            // ---------------------------------------------
 
             onPanUpdate: (details) {
-              final RenderBox box =
-                  context.findRenderObject()
-                      as RenderBox;
+              final Offset position =
+                  getLocalPosition(
+                context,
+                details.globalPosition,
+              );
 
               setState(() {
-                points.add(
-                  box.globalToLocal(
-                    details.globalPosition,
-                  ),
-                );
+                currentPoints ??= [];
+                currentPoints!.add(position);
               });
             },
+
+            // ---------------------------------------------
+            // FINISH STROKE
+            // ---------------------------------------------
 
             onPanEnd: (_) {
+              if (currentPoints == null ||
+                  currentPoints!.isEmpty) {
+                return;
+              }
+
               setState(() {
-                points.add(null);
+                strokes.add(
+                  DrawingStroke(
+                    points: List<Offset?>.from(
+                      currentPoints!,
+                    ),
+                    color: selectedColor,
+                  ),
+                );
+
+                currentPoints = null;
               });
             },
+
+            // ---------------------------------------------
+            // PAINTER
+            // ---------------------------------------------
 
             child: CustomPaint(
               painter: DrawPainter(
-                points,
-                selectedColor,
+                strokes: strokes,
+                currentPoints: currentPoints,
+                currentColor: selectedColor,
               ),
-
               child: Container(),
             ),
           ),
         ),
 
         // =================================================
-        // COLOR BAR
+        // BOTTOM CONTROL BAR
         // =================================================
 
         Positioned(
           left: 10,
           right: 10,
           bottom: 8,
-
           child: Container(
             padding: const EdgeInsets.symmetric(
               horizontal: 8,
               vertical: 10,
             ),
-
             decoration: BoxDecoration(
               color: Colors.white,
-
-              borderRadius:
-                  BorderRadius.circular(18),
-
+              borderRadius: BorderRadius.circular(18),
               boxShadow: const [
                 BoxShadow(
                   color: Colors.black12,
@@ -159,12 +224,14 @@ class _DrawingBoardState
                 ),
               ],
             ),
-
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-
               child: Row(
                 children: [
+                  // =================================================
+                  // COLORS
+                  // =================================================
+
                   colorButton(Colors.red),
                   colorButton(Colors.orange),
                   colorButton(Colors.yellow),
@@ -184,12 +251,57 @@ class _DrawingBoardState
 
                   const SizedBox(width: 8),
 
-                  IconButton(
-                    onPressed: clear,
+                  // =================================================
+                  // UNDO BUTTON
+                  // =================================================
 
-                    icon: const Icon(
-                      Icons.refresh,
-                      size: 30,
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: strokes.isEmpty
+                          ? null
+                          : undo,
+                      borderRadius:
+                          BorderRadius.circular(30),
+                      child: Padding(
+                        padding:
+                            const EdgeInsets.all(6),
+                        child: Icon(
+                          Icons.undo,
+                          size: 32,
+                          color: strokes.isEmpty
+                              ? Colors.grey
+                              : Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(width: 8),
+
+                  // =================================================
+                  // CLEAR BUTTON
+                  // =================================================
+
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: strokes.isEmpty
+                          ? null
+                          : clear,
+                      borderRadius:
+                          BorderRadius.circular(30),
+                      child: Padding(
+                        padding:
+                            const EdgeInsets.all(6),
+                        child: Icon(
+                          Icons.refresh,
+                          size: 32,
+                          color: strokes.isEmpty
+                              ? Colors.grey
+                              : Colors.black,
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -207,19 +319,29 @@ class _DrawingBoardState
 // =====================================================
 
 class DrawPainter extends CustomPainter {
-  final List<Offset?> points;
-  final Color color;
+  final List<DrawingStroke> strokes;
+  final List<Offset?>? currentPoints;
+  final Color currentColor;
 
-  DrawPainter(
-    this.points,
-    this.color,
-  );
+  DrawPainter({
+    required this.strokes,
+    required this.currentPoints,
+    required this.currentColor,
+  });
 
-  @override
-  void paint(
+  // =====================================================
+  // DRAW ONE STROKE
+  // =====================================================
+
+  void drawStroke(
     Canvas canvas,
-    Size size,
+    List<Offset?> points,
+    Color color,
   ) {
+    if (points.length < 2) {
+      return;
+    }
+
     final Paint paint = Paint()
       ..color = color
       ..strokeWidth = 9
@@ -227,15 +349,9 @@ class DrawPainter extends CustomPainter {
       ..strokeJoin = StrokeJoin.round
       ..style = PaintingStyle.stroke;
 
-    for (
-      int i = 0;
-      i < points.length - 1;
-      i++
-    ) {
-      if (
-        points[i] != null &&
-        points[i + 1] != null
-      ) {
+    for (int i = 0; i < points.length - 1; i++) {
+      if (points[i] != null &&
+          points[i + 1] != null) {
         canvas.drawLine(
           points[i]!,
           points[i + 1]!,
@@ -244,6 +360,38 @@ class DrawPainter extends CustomPainter {
       }
     }
   }
+
+  // =====================================================
+  // PAINT
+  // =====================================================
+
+  @override
+  void paint(
+    Canvas canvas,
+    Size size,
+  ) {
+    // Draw all completed strokes
+    for (final stroke in strokes) {
+      drawStroke(
+        canvas,
+        stroke.points,
+        stroke.color,
+      );
+    }
+
+    // Draw current stroke while finger is moving
+    if (currentPoints != null) {
+      drawStroke(
+        canvas,
+        currentPoints!,
+        currentColor,
+      );
+    }
+  }
+
+  // =====================================================
+  // REPAINT
+  // =====================================================
 
   @override
   bool shouldRepaint(

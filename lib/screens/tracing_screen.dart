@@ -9,7 +9,7 @@ class TracingScreen extends StatefulWidget {
   final String letter;
 
   // Current list/group
-  final List<String> groupLetters;
+  final List groupLetters;
 
   const TracingScreen({
     super.key,
@@ -18,7 +18,8 @@ class TracingScreen extends StatefulWidget {
   });
 
   @override
-  State<TracingScreen> createState() => _TracingScreenState();
+  State<TracingScreen> createState() =>
+      _TracingScreenState();
 }
 
 class _TracingScreenState extends State<TracingScreen> {
@@ -87,22 +88,28 @@ class _TracingScreenState extends State<TracingScreen> {
     }
 
     return currentIndex >= 0 &&
-        currentIndex < widget.groupLetters.length - 1;
+        currentIndex <
+            widget.groupLetters.length - 1;
   }
 
   // =====================================================
   // BACK
   //
-  // Back should NOT open previous tracing letter.
+  // Return to Marathi Mulakshare screen.
   //
-  // It should go out of tracing and return to the
-  // first/main page of the app.
+  // Home
+  //   ↓
+  // Marathi Mulakshare
+  //   ↓
+  // Letter
+  //   ↓
+  // BACK
+  //   ↓
+  // Marathi Mulakshare
   // =====================================================
 
   void goBack() {
-    Navigator.of(context).popUntil(
-      (route) => route.isFirst,
-    );
+    Navigator.of(context).pop();
   }
 
   // =====================================================
@@ -124,7 +131,7 @@ class _TracingScreenState extends State<TracingScreen> {
           return TracingScreen(
             letter: nextLetter,
 
-            // Keep the SAME group/list
+            // Keep same group
             groupLetters: widget.groupLetters,
           );
         },
@@ -142,21 +149,23 @@ class _TracingScreenState extends State<TracingScreen> {
         getSvgFile(widget.letter);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F4E3),
+      backgroundColor:
+          const Color(0xFFF8F4E3),
 
       // =================================================
       // APP BAR
       // =================================================
 
       appBar: AppBar(
-        backgroundColor: const Color(0xFFFFF7FF),
+        backgroundColor:
+            const Color(0xFFFFF7FF),
 
         elevation: 0,
 
         automaticallyImplyLeading: false,
 
         // -----------------------------------------------
-        // BACK - TOP LEFT
+        // BACK
         // -----------------------------------------------
 
         leading: IconButton(
@@ -177,7 +186,7 @@ class _TracingScreenState extends State<TracingScreen> {
           widget.letter,
 
           style: const TextStyle(
-            fontSize: 28,
+            fontSize: 30,
             fontWeight: FontWeight.bold,
             color: Colors.black87,
           ),
@@ -242,7 +251,7 @@ class _TracingScreenState extends State<TracingScreen> {
               widget.letter,
 
               style: const TextStyle(
-                fontSize: 90,
+                fontSize: 100,
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
               ),
@@ -287,7 +296,7 @@ class _TracingScreenState extends State<TracingScreen> {
                   // DRAWING BOARD
                   // --------------------------------------
 
-                  DrawingBoard(),
+                  const DrawingBoard(),
                 ],
               ),
             ),

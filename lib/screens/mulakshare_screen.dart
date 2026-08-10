@@ -94,9 +94,7 @@ class MulakshareScreen extends StatelessWidget {
   ) {
     return GridView.builder(
       shrinkWrap: true,
-
       physics: const NeverScrollableScrollPhysics(),
-
       itemCount: letters.length,
 
       gridDelegate:
@@ -111,7 +109,7 @@ class MulakshareScreen extends StatelessWidget {
         final String letter = letters[index];
 
         return Card(
-          elevation: 4,
+          elevation: 5,
 
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
@@ -131,8 +129,7 @@ class MulakshareScreen extends StatelessWidget {
                   builder: (_) => TracingScreen(
                     letter: letter,
 
-                    // VERY IMPORTANT
-                    // Send complete current group
+                    // Keep current group
                     groupLetters: letters,
                   ),
                 ),
@@ -145,19 +142,19 @@ class MulakshareScreen extends StatelessWidget {
 
               children: [
                 // ======================================
-                // LETTER
+                // LARGE MARATHI LETTER
                 // ======================================
 
                 Text(
                   letter,
 
                   style: const TextStyle(
-                    fontSize: 34,
+                    fontSize: 48,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
 
-                const SizedBox(height: 6),
+                const SizedBox(height: 4),
 
                 // ======================================
                 // SOUND
@@ -167,7 +164,7 @@ class MulakshareScreen extends StatelessWidget {
                   icon: const Icon(
                     Icons.volume_up,
                     color: Colors.green,
-                    size: 28,
+                    size: 30,
                   ),
 
                   onPressed: () {
@@ -194,7 +191,7 @@ class MulakshareScreen extends StatelessWidget {
           "मराठी मुळाक्षरे",
 
           style: TextStyle(
-            fontSize: 25,
+            fontSize: 27,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -205,6 +202,10 @@ class MulakshareScreen extends StatelessWidget {
 
         elevation: 0,
       ),
+
+      // =================================================
+      // BODY
+      // =================================================
 
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
@@ -230,7 +231,7 @@ class MulakshareScreen extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(
                   horizontal: 14,
-                  vertical: 8,
+                  vertical: 9,
                 ),
 
                 decoration: BoxDecoration(
@@ -245,7 +246,7 @@ class MulakshareScreen extends StatelessWidget {
 
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 22,
+                    fontSize: 23,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

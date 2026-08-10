@@ -39,7 +39,6 @@ class EnglishNumbersScreen extends StatelessWidget {
       body: GridView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: numbers.length,
-
         gridDelegate:
             const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
@@ -47,7 +46,6 @@ class EnglishNumbersScreen extends StatelessWidget {
           mainAxisSpacing: 15,
           childAspectRatio: 0.9,
         ),
-
         itemBuilder: (context, index) {
           final String currentNumber =
               numbers[index]["number"]!;
@@ -58,8 +56,12 @@ class EnglishNumbersScreen extends StatelessWidget {
           return InkWell(
             borderRadius: BorderRadius.circular(15),
 
-            onTap: () {
-              TtsService.speak(currentWord);
+            onTap: () async {
+              await TtsService.speakEnglish(
+                currentWord,
+              );
+
+              if (!context.mounted) return;
 
               Navigator.push(
                 context,
@@ -74,15 +76,12 @@ class EnglishNumbersScreen extends StatelessWidget {
 
             child: Card(
               elevation: 5,
-
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
-
               child: Column(
                 mainAxisAlignment:
                     MainAxisAlignment.center,
-
                 children: [
                   Text(
                     currentNumber,
