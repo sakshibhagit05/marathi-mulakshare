@@ -9,7 +9,7 @@ class EnglishTracingScreen extends StatefulWidget {
   final String letter;
 
   // A-Z किंवा 1-10 ची complete list
-  final List<String> groupLetters;
+  final List groupLetters;
 
   const EnglishTracingScreen({
     super.key,
@@ -22,8 +22,10 @@ class EnglishTracingScreen extends StatefulWidget {
       _EnglishTracingScreenState();
 }
 
-class _EnglishTracingScreenState
-    extends State<EnglishTracingScreen> {
+class _EnglishTracingScreenState extends State<EnglishTracingScreen> {
+  // =====================================================
+  // CURRENT INDEX
+  // =====================================================
 
   int get currentIndex {
     if (widget.groupLetters.isEmpty) {
@@ -33,10 +35,18 @@ class _EnglishTracingScreenState
     return widget.groupLetters.indexOf(widget.letter);
   }
 
+  // =====================================================
+  // NEXT AVAILABLE?
+  // =====================================================
+
   bool get hasNextLetter {
     return currentIndex >= 0 &&
         currentIndex < widget.groupLetters.length - 1;
   }
+
+  // =====================================================
+  // NEXT
+  // =====================================================
 
   void goToNext() {
     if (!hasNextLetter) return;
@@ -55,9 +65,17 @@ class _EnglishTracingScreenState
     );
   }
 
+  // =====================================================
+  // BACK
+  // =====================================================
+
   void goBack() {
     Navigator.pop(context);
   }
+
+  // =====================================================
+  // INITIAL SPEECH
+  // =====================================================
 
   @override
   void initState() {
@@ -73,6 +91,10 @@ class _EnglishTracingScreenState
     );
   }
 
+  // =====================================================
+  // BUILD
+  // =====================================================
+
   @override
   Widget build(BuildContext context) {
     final bool hasSvg =
@@ -84,10 +106,18 @@ class _EnglishTracingScreenState
     return Scaffold(
       backgroundColor: const Color(0xFFF8F4E3),
 
+      // =================================================
+      // APP BAR
+      // =================================================
+
       appBar: AppBar(
         backgroundColor: const Color(0xFFFFF7FF),
         elevation: 0,
         automaticallyImplyLeading: false,
+
+        // -------------------------------
+        // BACK
+        // -------------------------------
 
         leading: IconButton(
           onPressed: goBack,
@@ -97,6 +127,10 @@ class _EnglishTracingScreenState
             color: Colors.black87,
           ),
         ),
+
+        // -------------------------------
+        // TITLE
+        // -------------------------------
 
         title: Text(
           widget.letter,
@@ -109,11 +143,11 @@ class _EnglishTracingScreenState
 
         centerTitle: true,
 
-        actions: [
-          // ==============================
-          // NEXT BUTTON
-          // ==============================
+        // -------------------------------
+        // NEXT + SOUND
+        // -------------------------------
 
+        actions: [
           if (hasNextLetter)
             TextButton(
               onPressed: goToNext,
@@ -126,10 +160,6 @@ class _EnglishTracingScreenState
                 ),
               ),
             ),
-
-          // ==============================
-          // SOUND BUTTON
-          // ==============================
 
           IconButton(
             onPressed: () {
@@ -146,31 +176,30 @@ class _EnglishTracingScreenState
         ],
       ),
 
+      // =================================================
+      // BODY
+      // =================================================
+
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, screenConstraints) {
-
             final double screenWidth =
                 screenConstraints.maxWidth;
 
-            final double screenHeight =
-                screenConstraints.maxHeight;
-
             return Column(
               children: [
-
-                // ==================================
+                // ========================================
                 // TOP LETTER
-                // ==================================
+                // ========================================
 
                 SizedBox(
-                  height: screenWidth < 600 ? 85 : 105,
+                  height: screenWidth < 600 ? 75 : 95,
                   child: Center(
                     child: Text(
                       widget.letter,
                       style: TextStyle(
                         fontSize:
-                            screenWidth < 600 ? 70 : 85,
+                            screenWidth < 600 ? 65 : 80,
                         fontWeight: FontWeight.bold,
                         color: Colors.black87,
                       ),
@@ -178,56 +207,69 @@ class _EnglishTracingScreenState
                   ),
                 ),
 
-                // ==================================
+                // ========================================
                 // TRACING AREA
-                // ==================================
+                // ========================================
 
                 Expanded(
                   child: LayoutBuilder(
                     builder: (context, constraints) {
+                      // Available width
+                      final double availableWidth =
+                          constraints.maxWidth - 16;
 
-                      final double maxWidth =
-                          constraints.maxWidth - 24;
-
-                      final double maxHeight =
+                      // Available height
+                      final double availableHeight =
                           constraints.maxHeight - 10;
 
-                      // Mobile मध्ये मोठे tracing area
+                      // Choose the smaller dimension
                       double tracingSize =
-                          maxWidth < maxHeight
-                              ? maxWidth
-                              : maxHeight;
+                          availableWidth < availableHeight
+                              ? availableWidth
+                              : availableHeight;
 
-                      // Screen प्रमाणे size
+                      // ==================================
+                      // MOBILE SIZE
+                      // ==================================
+
                       if (screenWidth < 600) {
-                        tracingSize =
-                            tracingSize.clamp(300.0, 520.0);
-                      } else {
-                        tracingSize =
-                            tracingSize.clamp(350.0, 650.0);
+                        tracingSize = tracingSize.clamp(
+                          280.0,
+                          500.0,
+                        );
                       }
 
-                      // उपलब्ध जागेपेक्षा मोठे होऊ नये
+                      // ==================================
+                      // DESKTOP SIZE
+                      // ==================================
+
+                      else {
+                        tracingSize = tracingSize.clamp(
+                          350.0,
+                          650.0,
+                        );
+                      }
+
+                      // Never exceed available space
                       tracingSize =
                           tracingSize.clamp(
-                        280.0,
-                        maxWidth,
+                        260.0,
+                        availableWidth,
                       );
 
                       tracingSize =
                           tracingSize.clamp(
-                        280.0,
-                        maxHeight,
+                        260.0,
+                        availableHeight,
                       );
 
                       return Center(
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
-
-                            // =================================
+                            // ==================================
                             // WHITE TRACING PAPER
-                            // =================================
+                            // ==================================
 
                             Container(
                               width: tracingSize,
@@ -236,44 +278,54 @@ class _EnglishTracingScreenState
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius:
-                                    BorderRadius.circular(4),
+                                    BorderRadius.circular(6),
+
+                                border: Border.all(
+                                  color: Colors.grey.shade300,
+                                  width: 1,
+                                ),
                               ),
 
                               child: Center(
                                 child: hasSvg
-                                    ? SizedBox(
-                                        width:
-                                            tracingSize * 0.92,
-                                        height:
-                                            tracingSize * 0.92,
 
-                                        child: DashedLetter(
-                                          svgFile:
-                                              "english/$svg",
-                                        ),
+                                    // ==================================
+                                    // LARGE SVG LETTER
+                                    // ==================================
+
+                                    ? DashedLetter(
+                                        svgFile:
+                                            "english/$svg",
+
+                                        // IMPORTANT:
+                                        // SVG now grows with tracing area
+                                        size:
+                                            tracingSize * 0.96,
                                       )
 
-                                    // =========================
-                                    // NUMBERS
-                                    // =========================
+                                    // ==================================
+                                    // LARGE NUMBER
+                                    // ==================================
 
                                     : Text(
                                         widget.letter,
                                         style: TextStyle(
                                           fontSize:
-                                              tracingSize * 0.72,
+                                              tracingSize *
+                                                  0.78,
                                           fontWeight:
                                               FontWeight.bold,
-                                          color:
-                                              Colors.grey.shade300,
+                                          color: Colors
+                                              .grey
+                                              .shade300,
                                         ),
                                       ),
                               ),
                             ),
 
-                            // =================================
+                            // ==================================
                             // DRAWING BOARD
-                            // =================================
+                            // ==================================
 
                             SizedBox(
                               width: tracingSize,
