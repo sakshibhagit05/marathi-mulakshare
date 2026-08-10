@@ -37,9 +37,9 @@ class EnglishAlphabetScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Complete A-Z list
-    final List<String> allLetters =
-        letters.map((e) => e["letter"]!).toList();
+    // Complete alphabet list for Next button
+    final List<String> alphabet =
+        letters.map((item) => item["letter"]!).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -55,7 +55,6 @@ class EnglishAlphabetScreen extends StatelessWidget {
 
       body: GridView.builder(
         padding: const EdgeInsets.all(16),
-
         itemCount: letters.length,
 
         gridDelegate:
@@ -63,14 +62,14 @@ class EnglishAlphabetScreen extends StatelessWidget {
           crossAxisCount: 2,
           crossAxisSpacing: 15,
           mainAxisSpacing: 15,
-          childAspectRatio: 0.85,
+          childAspectRatio: 0.95,
         ),
 
         itemBuilder: (context, index) {
           final String currentLetter =
               letters[index]["letter"]!;
 
-          final String word =
+          final String currentWord =
               letters[index]["word"]!;
 
           return InkWell(
@@ -85,9 +84,9 @@ class EnglishAlphabetScreen extends StatelessWidget {
                   builder: (_) => EnglishTracingScreen(
                     letter: currentLetter,
 
-                    // IMPORTANT
-                    // Send complete A-Z list
-                    groupLetters: allLetters,
+                    // IMPORTANT:
+                    // Send complete alphabet
+                    groupLetters: alphabet,
                   ),
                 ),
               );
@@ -105,10 +104,6 @@ class EnglishAlphabetScreen extends StatelessWidget {
                     MainAxisAlignment.center,
 
                 children: [
-                  // -----------------------------------
-                  // LETTER
-                  // -----------------------------------
-
                   Text(
                     currentLetter,
                     style: const TextStyle(
@@ -117,15 +112,10 @@ class EnglishAlphabetScreen extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 8),
-
-                  // -----------------------------------
-                  // WORD
-                  // -----------------------------------
+                  const SizedBox(height: 10),
 
                   Text(
-                    word,
-                    textAlign: TextAlign.center,
+                    currentWord,
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -134,31 +124,18 @@ class EnglishAlphabetScreen extends StatelessWidget {
 
                   const SizedBox(height: 10),
 
-                  // -----------------------------------
-                  // EDIT ICON
-                  // -----------------------------------
-
                   const Icon(
                     Icons.edit,
                     color: Colors.blue,
-                    size: 28,
+                    size: 30,
                   ),
 
                   const SizedBox(height: 5),
 
-                  // -----------------------------------
-                  // SOUND ICON
-                  // -----------------------------------
-
-                  IconButton(
-                    icon: const Icon(
-                      Icons.volume_up,
-                      color: Colors.green,
-                      size: 30,
-                    ),
-                    onPressed: () {
-                      TtsService.speak(currentLetter);
-                    },
+                  const Icon(
+                    Icons.volume_up,
+                    color: Colors.green,
+                    size: 30,
                   ),
                 ],
               ),

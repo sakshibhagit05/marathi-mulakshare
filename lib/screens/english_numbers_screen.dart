@@ -21,9 +21,9 @@ class EnglishNumbersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Complete 1-10 list
-    final List<String> allNumbers =
-        numbers.map((e) => e["number"]!).toList();
+    // Complete number list for Next button
+    final List<String> numberList =
+        numbers.map((item) => item["number"]!).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -39,7 +39,6 @@ class EnglishNumbersScreen extends StatelessWidget {
 
       body: GridView.builder(
         padding: const EdgeInsets.all(16),
-
         itemCount: numbers.length,
 
         gridDelegate:
@@ -47,7 +46,7 @@ class EnglishNumbersScreen extends StatelessWidget {
           crossAxisCount: 2,
           crossAxisSpacing: 15,
           mainAxisSpacing: 15,
-          childAspectRatio: 0.85,
+          childAspectRatio: 0.95,
         ),
 
         itemBuilder: (context, index) {
@@ -69,16 +68,16 @@ class EnglishNumbersScreen extends StatelessWidget {
                   builder: (_) => EnglishTracingScreen(
                     letter: number,
 
-                    // IMPORTANT
-                    // Send complete 1-10 list
-                    groupLetters: allNumbers,
+                    // IMPORTANT:
+                    // Send complete number list
+                    groupLetters: numberList,
                   ),
                 ),
               );
             },
 
             child: Card(
-              elevation: 6,
+              elevation: 5,
 
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
@@ -89,10 +88,6 @@ class EnglishNumbersScreen extends StatelessWidget {
                     MainAxisAlignment.center,
 
                 children: [
-                  // -----------------------------------
-                  // NUMBER
-                  // -----------------------------------
-
                   Text(
                     number,
                     style: const TextStyle(
@@ -101,47 +96,31 @@ class EnglishNumbersScreen extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 8),
-
-                  // -----------------------------------
-                  // WORD
-                  // -----------------------------------
+                  const SizedBox(height: 10),
 
                   Text(
                     word,
                     style: const TextStyle(
-                      fontSize: 23,
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
+                      color: Colors.blue,
                     ),
                   ),
 
                   const SizedBox(height: 10),
 
-                  // -----------------------------------
-                  // EDIT ICON
-                  // -----------------------------------
-
                   const Icon(
                     Icons.edit,
                     color: Colors.blue,
-                    size: 28,
+                    size: 30,
                   ),
 
                   const SizedBox(height: 5),
 
-                  // -----------------------------------
-                  // SOUND
-                  // -----------------------------------
-
-                  IconButton(
-                    icon: const Icon(
-                      Icons.volume_up,
-                      color: Colors.green,
-                      size: 30,
-                    ),
-                    onPressed: () {
-                      TtsService.speak(word);
-                    },
+                  const Icon(
+                    Icons.volume_up,
+                    color: Colors.green,
+                    size: 30,
                   ),
                 ],
               ),

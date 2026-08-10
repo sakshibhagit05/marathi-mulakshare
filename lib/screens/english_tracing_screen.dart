@@ -7,7 +7,7 @@ import '../widgets/drawing_board.dart';
 class EnglishTracingScreen extends StatelessWidget {
   final String letter;
 
-  // Complete A-Z or 1-10 list
+  // Complete alphabet OR number list
   final List<String> groupLetters;
 
   const EnglishTracingScreen({
@@ -69,9 +69,8 @@ class EnglishTracingScreen extends StatelessWidget {
   // =====================================================
 
   void goBack(BuildContext context) {
-    // Directly return to the page from where
-    // tracing screen was opened.
-    Navigator.pop(context);
+    // Directly return to Alphabet / Numbers screen
+    Navigator.of(context).pop();
   }
 
   // =====================================================
@@ -96,27 +95,23 @@ class EnglishTracingScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: const Color(0xFFFFF7FF),
         elevation: 0,
+
         automaticallyImplyLeading: false,
 
-        // -----------------------------------------------
         // BACK
-        // -----------------------------------------------
-
         leading: IconButton(
           onPressed: () {
             goBack(context);
           },
+
           icon: const Icon(
             Icons.arrow_back,
-            size: 34,
+            size: 32,
             color: Colors.black87,
           ),
         ),
 
-        // -----------------------------------------------
         // TITLE
-        // -----------------------------------------------
-
         title: Text(
           letter,
           style: const TextStyle(
@@ -128,27 +123,27 @@ class EnglishTracingScreen extends StatelessWidget {
 
         centerTitle: true,
 
-        // -----------------------------------------------
         // NEXT
-        // -----------------------------------------------
-
         actions: [
           if (hasNextLetter)
-            TextButton(
-              onPressed: () {
-                goToNext(context);
-              },
-              child: const Text(
-                "Next →",
-                style: TextStyle(
-                  fontSize: 21,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.deepPurple,
+            Padding(
+              padding: const EdgeInsets.only(right: 4),
+
+              child: TextButton(
+                onPressed: () {
+                  goToNext(context);
+                },
+
+                child: const Text(
+                  "Next →",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.deepPurple,
+                  ),
                 ),
               ),
             ),
-
-          const SizedBox(width: 4),
         ],
       ),
 
@@ -160,79 +155,85 @@ class EnglishTracingScreen extends StatelessWidget {
         child: Column(
           children: [
             // ===========================================
-            // SMALL CURRENT LETTER
+            // SMALL TITLE LETTER
             // ===========================================
 
-            const SizedBox(height: 4),
+            const SizedBox(height: 5),
 
             Text(
               letter,
               style: const TextStyle(
-                fontSize: 70,
+                fontSize: 85,
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
               ),
             ),
 
-            const SizedBox(height: 4),
-
             // ===========================================
-            // LARGE TRACING AREA
+            // TRACING AREA
             // ===========================================
 
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
-                ),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    // -----------------------------------
-                    // ENGLISH ALPHABET SVG
-                    // -----------------------------------
+              child: Stack(
+                alignment: Alignment.center,
 
-                    if (hasSvg)
-                      Positioned.fill(
-                        child: Padding(
-                          padding: const EdgeInsets.all(4),
+                children: [
+                  // ---------------------------------------
+                  // LARGE SVG LETTER
+                  // ---------------------------------------
+
+                  if (hasSvg)
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        final double size =
+                            constraints.maxWidth < 600
+                                ? constraints.maxWidth * 0.90
+                                : 520;
+
+                        return SizedBox(
+                          width: size,
+                          height: size,
+
                           child: DashedLetter(
                             svgFile: "english/$svg",
                           ),
-                        ),
-                      )
+                        );
+                      },
+                    )
 
-                    // -----------------------------------
-                    // ENGLISH NUMBER
-                    // -----------------------------------
+                  // ---------------------------------------
+                  // LARGE NUMBER
+                  // ---------------------------------------
 
-                    else
-                      Positioned.fill(
-                        child: Center(
-                          child: FittedBox(
-                            fit: BoxFit.contain,
-                            child: Text(
-                              letter,
-                              style: TextStyle(
-                                fontSize: 500,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey.shade300,
-                              ),
+                  else
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        final double fontSize =
+                            constraints.maxWidth < 600
+                                ? constraints.maxWidth * 0.75
+                                : 360;
+
+                        return Center(
+                          child: Text(
+                            letter,
+                            style: TextStyle(
+                              fontSize: fontSize,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey.shade300,
                             ),
                           ),
-                        ),
-                      ),
-
-                    // -----------------------------------
-                    // DRAWING BOARD
-                    // -----------------------------------
-
-                    Positioned.fill(
-                      child: DrawingBoard(),
+                        );
+                      },
                     ),
-                  ],
-                ),
+
+                  // ---------------------------------------
+                  // DRAWING BOARD
+                  // ---------------------------------------
+
+                  Positioned.fill(
+                    child: DrawingBoard(),
+                  ),
+                ],
               ),
             ),
           ],
