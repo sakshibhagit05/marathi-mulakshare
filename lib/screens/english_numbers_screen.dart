@@ -22,7 +22,7 @@ class EnglishNumbersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Complete number list for Next button
-    final List<String> numberList =
+    final List<String> allNumbers =
         numbers.map((item) => item["number"]!).toList();
 
     return Scaffold(
@@ -30,7 +30,7 @@ class EnglishNumbersScreen extends StatelessWidget {
         title: const Text(
           "English Numbers",
           style: TextStyle(
-            fontSize: 25,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -46,31 +46,31 @@ class EnglishNumbersScreen extends StatelessWidget {
           crossAxisCount: 2,
           crossAxisSpacing: 15,
           mainAxisSpacing: 15,
-          childAspectRatio: 0.95,
+          childAspectRatio: 0.9,
         ),
 
         itemBuilder: (context, index) {
-          final String number =
+          final String currentNumber =
               numbers[index]["number"]!;
 
-          final String word =
+          final String currentWord =
               numbers[index]["word"]!;
 
           return InkWell(
             borderRadius: BorderRadius.circular(15),
 
             onTap: () {
-              TtsService.speak(word);
+              TtsService.speak(currentWord);
 
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (_) => EnglishTracingScreen(
-                    letter: number,
+                    letter: currentNumber,
 
                     // IMPORTANT:
                     // Send complete number list
-                    groupLetters: numberList,
+                    groupLetters: allNumbers,
                   ),
                 ),
               );
@@ -88,22 +88,30 @@ class EnglishNumbersScreen extends StatelessWidget {
                     MainAxisAlignment.center,
 
                 children: [
+                  // -------------------------------
+                  // NUMBER
+                  // -------------------------------
+
                   Text(
-                    number,
+                    currentNumber,
                     style: const TextStyle(
-                      fontSize: 70,
+                      fontSize: 60,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
 
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 8),
+
+                  // -------------------------------
+                  // WORD
+                  // -------------------------------
 
                   Text(
-                    word,
+                    currentWord,
+                    textAlign: TextAlign.center,
                     style: const TextStyle(
-                      fontSize: 24,
+                      fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      color: Colors.blue,
                     ),
                   ),
 
@@ -112,7 +120,7 @@ class EnglishNumbersScreen extends StatelessWidget {
                   const Icon(
                     Icons.edit,
                     color: Colors.blue,
-                    size: 30,
+                    size: 28,
                   ),
 
                   const SizedBox(height: 5),
@@ -120,7 +128,7 @@ class EnglishNumbersScreen extends StatelessWidget {
                   const Icon(
                     Icons.volume_up,
                     color: Colors.green,
-                    size: 30,
+                    size: 28,
                   ),
                 ],
               ),

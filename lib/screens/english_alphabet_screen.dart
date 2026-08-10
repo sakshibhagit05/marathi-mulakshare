@@ -38,7 +38,7 @@ class EnglishAlphabetScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Complete alphabet list for Next button
-    final List<String> alphabet =
+    final List<String> allLetters =
         letters.map((item) => item["letter"]!).toList();
 
     return Scaffold(
@@ -46,7 +46,7 @@ class EnglishAlphabetScreen extends StatelessWidget {
         title: const Text(
           "English Alphabets",
           style: TextStyle(
-            fontSize: 25,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -62,7 +62,7 @@ class EnglishAlphabetScreen extends StatelessWidget {
           crossAxisCount: 2,
           crossAxisSpacing: 15,
           mainAxisSpacing: 15,
-          childAspectRatio: 0.95,
+          childAspectRatio: 0.9,
         ),
 
         itemBuilder: (context, index) {
@@ -85,8 +85,8 @@ class EnglishAlphabetScreen extends StatelessWidget {
                     letter: currentLetter,
 
                     // IMPORTANT:
-                    // Send complete alphabet
-                    groupLetters: alphabet,
+                    // Send complete alphabet list
+                    groupLetters: allLetters,
                   ),
                 ),
               );
@@ -104,30 +104,39 @@ class EnglishAlphabetScreen extends StatelessWidget {
                     MainAxisAlignment.center,
 
                 children: [
+                  // -------------------------------
+                  // LETTER
+                  // -------------------------------
+
                   Text(
                     currentLetter,
                     style: const TextStyle(
-                      fontSize: 65,
+                      fontSize: 60,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
 
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 8),
+
+                  // -------------------------------
+                  // WORD
+                  // -------------------------------
 
                   Text(
                     currentWord,
+                    textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
 
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 8),
 
                   const Icon(
                     Icons.edit,
                     color: Colors.blue,
-                    size: 30,
+                    size: 28,
                   ),
 
                   const SizedBox(height: 5),
@@ -135,7 +144,7 @@ class EnglishAlphabetScreen extends StatelessWidget {
                   const Icon(
                     Icons.volume_up,
                     color: Colors.green,
-                    size: 30,
+                    size: 28,
                   ),
                 ],
               ),
