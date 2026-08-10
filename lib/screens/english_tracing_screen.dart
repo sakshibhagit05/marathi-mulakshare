@@ -8,7 +8,7 @@ import '../services/tts_service.dart';
 class EnglishTracingScreen extends StatefulWidget {
   final String letter;
 
-  // A-Z किंवा 1-10 ची complete list
+  // Complete A-Z or 1-10 list
   final List groupLetters;
 
   const EnglishTracingScreen({
@@ -22,7 +22,9 @@ class EnglishTracingScreen extends StatefulWidget {
       _EnglishTracingScreenState();
 }
 
-class _EnglishTracingScreenState extends State<EnglishTracingScreen> {
+class _EnglishTracingScreenState
+    extends State<EnglishTracingScreen> {
+
   // =====================================================
   // CURRENT INDEX
   // =====================================================
@@ -49,7 +51,9 @@ class _EnglishTracingScreenState extends State<EnglishTracingScreen> {
   // =====================================================
 
   void goToNext() {
-    if (!hasNextLetter) return;
+    if (!hasNextLetter) {
+      return;
+    }
 
     final String nextLetter =
         widget.groupLetters[currentIndex + 1];
@@ -116,7 +120,7 @@ class _EnglishTracingScreenState extends State<EnglishTracingScreen> {
         automaticallyImplyLeading: false,
 
         // -------------------------------
-        // BACK
+        // BACK BUTTON
         // -------------------------------
 
         leading: IconButton(
@@ -148,6 +152,7 @@ class _EnglishTracingScreenState extends State<EnglishTracingScreen> {
         // -------------------------------
 
         actions: [
+          // NEXT BUTTON
           if (hasNextLetter)
             TextButton(
               onPressed: goToNext,
@@ -161,6 +166,7 @@ class _EnglishTracingScreenState extends State<EnglishTracingScreen> {
               ),
             ),
 
+          // SOUND BUTTON
           IconButton(
             onPressed: () {
               TtsService.speak(widget.letter);
@@ -188,18 +194,20 @@ class _EnglishTracingScreenState extends State<EnglishTracingScreen> {
 
             return Column(
               children: [
+
                 // ========================================
-                // TOP LETTER
+                // SMALL LETTER AT TOP
                 // ========================================
 
                 SizedBox(
-                  height: screenWidth < 600 ? 75 : 95,
+                  height: screenWidth < 600 ? 65 : 90,
+
                   child: Center(
                     child: Text(
                       widget.letter,
                       style: TextStyle(
                         fontSize:
-                            screenWidth < 600 ? 65 : 80,
+                            screenWidth < 600 ? 60 : 80,
                         fontWeight: FontWeight.bold,
                         color: Colors.black87,
                       ),
@@ -214,62 +222,63 @@ class _EnglishTracingScreenState extends State<EnglishTracingScreen> {
                 Expanded(
                   child: LayoutBuilder(
                     builder: (context, constraints) {
-                      // Available width
+
+                      // Leave a very small margin
                       final double availableWidth =
-                          constraints.maxWidth - 16;
+                          constraints.maxWidth - 8;
 
-                      // Available height
                       final double availableHeight =
-                          constraints.maxHeight - 10;
+                          constraints.maxHeight - 8;
 
-                      // Choose the smaller dimension
+                      // Use the largest square that fits
                       double tracingSize =
                           availableWidth < availableHeight
                               ? availableWidth
                               : availableHeight;
 
                       // ==================================
-                      // MOBILE SIZE
+                      // MOBILE
                       // ==================================
 
                       if (screenWidth < 600) {
-                        tracingSize = tracingSize.clamp(
+                        tracingSize =
+                            tracingSize.clamp(
                           280.0,
-                          500.0,
+                          520.0,
                         );
                       }
 
                       // ==================================
-                      // DESKTOP SIZE
+                      // DESKTOP / TABLET
                       // ==================================
 
                       else {
-                        tracingSize = tracingSize.clamp(
+                        tracingSize =
+                            tracingSize.clamp(
                           350.0,
-                          650.0,
+                          680.0,
                         );
                       }
 
-                      // Never exceed available space
+                      // Make absolutely sure it fits
                       tracingSize =
-                          tracingSize.clamp(
-                        260.0,
-                        availableWidth,
-                      );
+                          tracingSize > availableWidth
+                              ? availableWidth
+                              : tracingSize;
 
                       tracingSize =
-                          tracingSize.clamp(
-                        260.0,
-                        availableHeight,
-                      );
+                          tracingSize > availableHeight
+                              ? availableHeight
+                              : tracingSize;
 
                       return Center(
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
-                            // ==================================
+
+                            // =================================
                             // WHITE TRACING PAPER
-                            // ==================================
+                            // =================================
 
                             Container(
                               width: tracingSize,
@@ -277,11 +286,13 @@ class _EnglishTracingScreenState extends State<EnglishTracingScreen> {
 
                               decoration: BoxDecoration(
                                 color: Colors.white,
+
                                 borderRadius:
                                     BorderRadius.circular(6),
 
                                 border: Border.all(
-                                  color: Colors.grey.shade300,
+                                  color:
+                                      Colors.grey.shade300,
                                   width: 1,
                                 ),
                               ),
@@ -289,32 +300,35 @@ class _EnglishTracingScreenState extends State<EnglishTracingScreen> {
                               child: Center(
                                 child: hasSvg
 
-                                    // ==================================
-                                    // LARGE SVG LETTER
-                                    // ==================================
+                                    // =================================
+                                    // MAXIMUM SAFE SVG LETTER
+                                    // =================================
 
                                     ? DashedLetter(
                                         svgFile:
                                             "english/$svg",
 
-                                        // IMPORTANT:
-                                        // SVG now grows with tracing area
+                                        // Almost the entire
+                                        // tracing paper.
                                         size:
-                                            tracingSize * 0.96,
+                                            tracingSize * 0.99,
                                       )
 
-                                    // ==================================
+                                    // =================================
                                     // LARGE NUMBER
-                                    // ==================================
+                                    // =================================
 
                                     : Text(
                                         widget.letter,
+
                                         style: TextStyle(
                                           fontSize:
                                               tracingSize *
-                                                  0.78,
+                                                  0.85,
+
                                           fontWeight:
                                               FontWeight.bold,
+
                                           color: Colors
                                               .grey
                                               .shade300,
@@ -323,13 +337,14 @@ class _EnglishTracingScreenState extends State<EnglishTracingScreen> {
                               ),
                             ),
 
-                            // ==================================
+                            // =================================
                             // DRAWING BOARD
-                            // ==================================
+                            // =================================
 
                             SizedBox(
                               width: tracingSize,
                               height: tracingSize,
+
                               child: DrawingBoard(),
                             ),
                           ],

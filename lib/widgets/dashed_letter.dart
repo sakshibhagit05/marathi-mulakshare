@@ -16,8 +16,12 @@ class DashedLetter extends StatelessWidget {
     return Center(
       child: SvgPicture.asset(
         "assets/svg/$svgFile",
+
+        // Use the size given by EnglishTracingScreen
         width: size,
         height: size,
+
+        // Keep the complete letter visible
         fit: BoxFit.contain,
       ),
     );
