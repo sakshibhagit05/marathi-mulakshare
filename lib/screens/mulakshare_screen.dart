@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'tracing_screen.dart';
+import 'vachanpath_screen.dart';
 import '../services/tts_service.dart';
 
 class MulakshareScreen extends StatelessWidget {
@@ -85,17 +86,149 @@ class MulakshareScreen extends StatelessWidget {
   ];
 
   // ==================================================
+  // VACHANPATH DATA
+  // ==================================================
+
+  final List<List<String>> vachanpathData = [
+    // ==================================================
+    // वाचनपाठ १
+    // ==================================================
+
+    [
+      "काका आला.",
+      "मामा आला.",
+      "लाला आला.",
+      "काल आलम आला.",
+    ],
+
+    // ==================================================
+    // वाचनपाठ २
+    // ==================================================
+
+    [
+      "घार आली घार.",
+      "रिमा घार बघ.",
+      "बाबा घार बघा.",
+      "मामा, मामी घार बघा.",
+      "काका, काकी घार बघा.",
+      "बघा बघा घार बघा.",
+    ],
+
+    // ==================================================
+    // वाचनपाठ ३
+    // ==================================================
+
+    [
+      "आला आला पाऊस आला.",
+      "सरसर सरसर पाऊस आला.",
+      "काका, काकू पाऊस बघा.",
+      "कुमार, पूनम पाऊस बघा.",
+      "आला आला पाऊस आला.",
+    ],
+
+    // ==================================================
+    // वाचनपाठ ४
+    // ==================================================
+
+    [
+      "सकाळ झाली.",
+      "रतन, रमाने बाहेर पाला पाहिला.",
+      "रमाने पाला सुपलीत उचलला.",
+    ],
+
+    // ==================================================
+    // वाचनपाठ ५
+    // ==================================================
+
+    [
+      "मुले सहलीला निघाली.",
+      "रवीही सहलीला निघाला.",
+      "आईने लाडू, चिवडा केला.",
+      "चपाती व उसळ केली.",
+      "गरम डबा दिला.",
+      "आवडीची कैरी दिली.",
+      "नगमा आली. वैदेही आली.",
+      "सहलीची बस निघाली.",
+    ],
+
+    // ==================================================
+    // वाचनपाठ ६
+    // ==================================================
+
+    [
+      "जय व राज दोघे सोबती.",
+      "शाळेतून घरी आले.",
+      "दोघेही बागेत फिरायला गेले.",
+      "फळझाडे व फुलझाडे पाहिली.",
+      "फळे-फुले वेचून घेतली.",
+      "मधाचे पोळे पाहिले.",
+      "मोरही पाहिला.",
+      "आजचा दिवस मजेत गेला.",
+    ],
+
+    // ==================================================
+    // वाचनपाठ ७
+    // ==================================================
+
+    [
+      "सौरभची आजी जेवण बनवते.",
+      "चवदार भाजी करते.",
+      "मुगाची खिचडी करते.",
+      "पालकची भजी करते.",
+      "नाचणीचे धिरडे करते.",
+      "डाळीचे वडे करते.",
+      "बाजरीची भाकरी खरपूस भाजते.",
+      "रुचकर चवीची थाळी सजते.",
+    ],
+
+    // ==================================================
+    // वाचनपाठ ८
+    // ==================================================
+
+    [
+      "शिरीषने ठोकळे जमवले.",
+      "काही चौरस काही आयत.",
+      "शिरीषने ढिगातून ठोकळे घेतले.",
+      "छान घर तयार केले. इमारत केली.",
+      "शाळा केली. नागमोडी वाट केली.",
+      "चढ उताराचा घाट केला.",
+      "असे छान ठोकळे रचले.",
+    ],
+
+    // ==================================================
+    // वाचनपाठ ९
+    // ==================================================
+
+    [
+      "अँना भिलारला गेली. सोबत टॉम होता.",
+      "भिलार म्हणजे पुस्तकांचे गाव.",
+      "गावात होती पुस्तकेच पुस्तके.",
+      "अँनाने एक पुस्तक घेतले.",
+      "पुस्तकात खूप गोष्टी होत्या. छान चित्रे होती.",
+      "अँना वाचू लागली. टॉम ऐकत होता.",
+      "वाचताना तिला मजा आली.",
+      "दोघेही खूश झाले.",
+      "त्यांना भिलार गाव आवडले.",
+    ],
+  ];
+
+  // ==================================================
   // LETTER GRID
   // ==================================================
 
   Widget letterGrid(
     BuildContext context,
     List<String> letters,
+    int groupIndex,
   ) {
+    // 5/6/7 letters + 1 Vachanpath card
+    final int totalItems = letters.length + 1;
+
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: letters.length,
+
+      itemCount: totalItems,
 
       gridDelegate:
           const SliverGridDelegateWithFixedCrossAxisCount(
@@ -106,6 +239,82 @@ class MulakshareScreen extends StatelessWidget {
       ),
 
       itemBuilder: (context, index) {
+        // ==================================================
+        // VACHANPATH CARD
+        // ==================================================
+
+        if (index == letters.length) {
+          return Card(
+            elevation: 5,
+
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+
+            child: InkWell(
+              borderRadius: BorderRadius.circular(15),
+
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => VachanpathScreen(
+                      pathNumber: groupIndex + 1,
+                      sentences:
+                          vachanpathData[groupIndex],
+                    ),
+                  ),
+                );
+              },
+
+              child: Column(
+                mainAxisAlignment:
+                    MainAxisAlignment.center,
+
+                children: [
+                  // Book Icon
+                  Icon(
+                    Icons.menu_book,
+                    color: colors[groupIndex],
+                    size: 50,
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  // Vachanpath Number
+                  Text(
+                    "वाचनपाठ–${groupIndex + 1}",
+
+                    textAlign: TextAlign.center,
+
+                    style: TextStyle(
+                      fontSize: 21,
+                      fontWeight: FontWeight.bold,
+                      color: colors[groupIndex],
+                    ),
+                  ),
+
+                  const SizedBox(height: 5),
+
+                  const Text(
+                    "वाचा",
+
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black54,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+
+        // ==================================================
+        // NORMAL LETTER CARD
+        // ==================================================
+
         final String letter = letters[index];
 
         return Card(
@@ -255,12 +464,13 @@ class MulakshareScreen extends StatelessWidget {
               const SizedBox(height: 12),
 
               // ========================================
-              // LETTER GRID
+              // LETTER + VACHANPATH GRID
               // ========================================
 
               letterGrid(
                 context,
                 letters,
+                index,
               ),
 
               const SizedBox(height: 28),
