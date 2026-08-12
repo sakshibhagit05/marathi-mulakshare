@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'tracing_screen.dart';
 import 'vachanpath_screen.dart';
 import '../services/tts_service.dart';
+import 'vachanpath_screen.dart';
 
 class MulakshareScreen extends StatelessWidget {
   MulakshareScreen({super.key});
