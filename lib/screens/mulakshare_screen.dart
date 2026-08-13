@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'tracing_screen.dart';
-import 'vachanpath_screen.dart';
+import 'vachanpath_1_screen.dart';
 import '../services/tts_service.dart';
-import 'vachanpath_screen.dart';
 
 class MulakshareScreen extends StatelessWidget {
   MulakshareScreen({super.key});
@@ -87,149 +86,17 @@ class MulakshareScreen extends StatelessWidget {
   ];
 
   // ==================================================
-  // VACHANPATH DATA
-  // ==================================================
-
-  final List<List<String>> vachanpathData = [
-    // ==================================================
-    // वाचनपाठ १
-    // ==================================================
-
-    [
-      "काका आला.",
-      "मामा आला.",
-      "लाला आला.",
-      "काल आलम आला.",
-    ],
-
-    // ==================================================
-    // वाचनपाठ २
-    // ==================================================
-
-    [
-      "घार आली घार.",
-      "रिमा घार बघ.",
-      "बाबा घार बघा.",
-      "मामा, मामी घार बघा.",
-      "काका, काकी घार बघा.",
-      "बघा बघा घार बघा.",
-    ],
-
-    // ==================================================
-    // वाचनपाठ ३
-    // ==================================================
-
-    [
-      "आला आला पाऊस आला.",
-      "सरसर सरसर पाऊस आला.",
-      "काका, काकू पाऊस बघा.",
-      "कुमार, पूनम पाऊस बघा.",
-      "आला आला पाऊस आला.",
-    ],
-
-    // ==================================================
-    // वाचनपाठ ४
-    // ==================================================
-
-    [
-      "सकाळ झाली.",
-      "रतन, रमाने बाहेर पाला पाहिला.",
-      "रमाने पाला सुपलीत उचलला.",
-    ],
-
-    // ==================================================
-    // वाचनपाठ ५
-    // ==================================================
-
-    [
-      "मुले सहलीला निघाली.",
-      "रवीही सहलीला निघाला.",
-      "आईने लाडू, चिवडा केला.",
-      "चपाती व उसळ केली.",
-      "गरम डबा दिला.",
-      "आवडीची कैरी दिली.",
-      "नगमा आली. वैदेही आली.",
-      "सहलीची बस निघाली.",
-    ],
-
-    // ==================================================
-    // वाचनपाठ ६
-    // ==================================================
-
-    [
-      "जय व राज दोघे सोबती.",
-      "शाळेतून घरी आले.",
-      "दोघेही बागेत फिरायला गेले.",
-      "फळझाडे व फुलझाडे पाहिली.",
-      "फळे-फुले वेचून घेतली.",
-      "मधाचे पोळे पाहिले.",
-      "मोरही पाहिला.",
-      "आजचा दिवस मजेत गेला.",
-    ],
-
-    // ==================================================
-    // वाचनपाठ ७
-    // ==================================================
-
-    [
-      "सौरभची आजी जेवण बनवते.",
-      "चवदार भाजी करते.",
-      "मुगाची खिचडी करते.",
-      "पालकची भजी करते.",
-      "नाचणीचे धिरडे करते.",
-      "डाळीचे वडे करते.",
-      "बाजरीची भाकरी खरपूस भाजते.",
-      "रुचकर चवीची थाळी सजते.",
-    ],
-
-    // ==================================================
-    // वाचनपाठ ८
-    // ==================================================
-
-    [
-      "शिरीषने ठोकळे जमवले.",
-      "काही चौरस काही आयत.",
-      "शिरीषने ढिगातून ठोकळे घेतले.",
-      "छान घर तयार केले. इमारत केली.",
-      "शाळा केली. नागमोडी वाट केली.",
-      "चढ उताराचा घाट केला.",
-      "असे छान ठोकळे रचले.",
-    ],
-
-    // ==================================================
-    // वाचनपाठ ९
-    // ==================================================
-
-    [
-      "अँना भिलारला गेली. सोबत टॉम होता.",
-      "भिलार म्हणजे पुस्तकांचे गाव.",
-      "गावात होती पुस्तकेच पुस्तके.",
-      "अँनाने एक पुस्तक घेतले.",
-      "पुस्तकात खूप गोष्टी होत्या. छान चित्रे होती.",
-      "अँना वाचू लागली. टॉम ऐकत होता.",
-      "वाचताना तिला मजा आली.",
-      "दोघेही खूश झाले.",
-      "त्यांना भिलार गाव आवडले.",
-    ],
-  ];
-
-  // ==================================================
   // LETTER GRID
   // ==================================================
 
   Widget letterGrid(
     BuildContext context,
     List<String> letters,
-    int groupIndex,
   ) {
-    // 5/6/7 letters + 1 Vachanpath card
-    final int totalItems = letters.length + 1;
-
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-
-      itemCount: totalItems,
+      itemCount: letters.length,
 
       gridDelegate:
           const SliverGridDelegateWithFixedCrossAxisCount(
@@ -240,82 +107,6 @@ class MulakshareScreen extends StatelessWidget {
       ),
 
       itemBuilder: (context, index) {
-        // ==================================================
-        // VACHANPATH CARD
-        // ==================================================
-
-        if (index == letters.length) {
-          return Card(
-            elevation: 5,
-
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-
-            child: InkWell(
-              borderRadius: BorderRadius.circular(15),
-
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => VachanpathScreen(
-                      pathNumber: groupIndex + 1,
-                      sentences:
-                          vachanpathData[groupIndex],
-                    ),
-                  ),
-                );
-              },
-
-              child: Column(
-                mainAxisAlignment:
-                    MainAxisAlignment.center,
-
-                children: [
-                  // Book Icon
-                  Icon(
-                    Icons.menu_book,
-                    color: colors[groupIndex],
-                    size: 50,
-                  ),
-
-                  const SizedBox(height: 8),
-
-                  // Vachanpath Number
-                  Text(
-                    "वाचनपाठ–${groupIndex + 1}",
-
-                    textAlign: TextAlign.center,
-
-                    style: TextStyle(
-                      fontSize: 21,
-                      fontWeight: FontWeight.bold,
-                      color: colors[groupIndex],
-                    ),
-                  ),
-
-                  const SizedBox(height: 5),
-
-                  const Text(
-                    "वाचा",
-
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black54,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
-
-        // ==================================================
-        // NORMAL LETTER CARD
-        // ==================================================
-
         final String letter = letters[index];
 
         return Card(
@@ -328,18 +119,12 @@ class MulakshareScreen extends StatelessWidget {
           child: InkWell(
             borderRadius: BorderRadius.circular(15),
 
-            // ==========================================
-            // OPEN TRACING
-            // ==========================================
-
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (_) => TracingScreen(
                     letter: letter,
-
-                    // Keep current group
                     groupLetters: letters,
                   ),
                 ),
@@ -351,13 +136,10 @@ class MulakshareScreen extends StatelessWidget {
                   MainAxisAlignment.center,
 
               children: [
-                // ======================================
                 // LARGE MARATHI LETTER
-                // ======================================
 
                 Text(
                   letter,
-
                   style: const TextStyle(
                     fontSize: 48,
                     fontWeight: FontWeight.bold,
@@ -366,9 +148,7 @@ class MulakshareScreen extends StatelessWidget {
 
                 const SizedBox(height: 4),
 
-                // ======================================
                 // SOUND
-                // ======================================
 
                 IconButton(
                   icon: const Icon(
@@ -390,6 +170,162 @@ class MulakshareScreen extends StatelessWidget {
   }
 
   // ==================================================
+  // VACHANPATH CARD
+  // ==================================================
+
+  Widget vachanpathCard(BuildContext context) {
+    return Center(
+      child: SizedBox(
+        width: 300,
+
+        child: ElevatedButton.icon(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const Vachanpath1Screen(),
+              ),
+            );
+          },
+
+          icon: const Icon(
+            Icons.menu_book,
+            size: 28,
+          ),
+
+          label: const Text(
+            "वाचनपाठ–१",
+            style: TextStyle(
+              fontSize: 23,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.pink,
+            foregroundColor: Colors.white,
+
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 15,
+            ),
+
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+
+            elevation: 4,
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ==================================================
+  // SHABD OLKHA CARD
+  // ==================================================
+
+  Widget shabdOlkhaCard(BuildContext context) {
+    return Center(
+      child: SizedBox(
+        width: 300,
+
+        child: ElevatedButton.icon(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const ShabdOlkhaScreen(),
+              ),
+            );
+          },
+
+          icon: const Icon(
+            Icons.extension,
+            size: 28,
+          ),
+
+          label: const Text(
+            "शब्द ओळखा",
+            style: TextStyle(
+              fontSize: 23,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.orange,
+            foregroundColor: Colors.white,
+
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 15,
+            ),
+
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+
+            elevation: 4,
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ==================================================
+  // VACHAA CARD
+  // ==================================================
+
+  Widget vachaaCard(BuildContext context) {
+    return Center(
+      child: SizedBox(
+        width: 300,
+
+        child: ElevatedButton.icon(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const VachaaScreen(),
+              ),
+            );
+          },
+
+          icon: const Icon(
+            Icons.menu_book_outlined,
+            size: 28,
+          ),
+
+          label: const Text(
+            "वाचा",
+            style: TextStyle(
+              fontSize: 23,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            foregroundColor: Colors.white,
+
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 15,
+            ),
+
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+
+            elevation: 4,
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ==================================================
   // BUILD
   // ==================================================
 
@@ -399,7 +335,6 @@ class MulakshareScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           "मराठी मुळाक्षरे",
-
           style: TextStyle(
             fontSize: 27,
             fontWeight: FontWeight.bold,
@@ -408,7 +343,8 @@ class MulakshareScreen extends StatelessWidget {
 
         centerTitle: true,
 
-        backgroundColor: const Color(0xFFFFF7FF),
+        backgroundColor:
+            const Color(0xFFFFF7FF),
 
         elevation: 0,
       ),
@@ -465,17 +401,226 @@ class MulakshareScreen extends StatelessWidget {
               const SizedBox(height: 12),
 
               // ========================================
-              // LETTER + VACHANPATH GRID
+              // LETTER GRID
               // ========================================
 
               letterGrid(
                 context,
                 letters,
-                index,
               ),
+
+              // ========================================
+              // ACTIVITIES
+              // ONLY FOR GROUP 1
+              // ========================================
+
+              if (index == 0) ...[
+                const SizedBox(height: 18),
+
+                // --------------------------------------
+                // VACHANPATH 1
+                // --------------------------------------
+
+                vachanpathCard(context),
+
+                const SizedBox(height: 12),
+
+                // --------------------------------------
+                // SHABD OLKHA
+                // --------------------------------------
+
+                shabdOlkhaCard(context),
+
+                const SizedBox(height: 12),
+
+                // --------------------------------------
+                // VACHAA
+                // --------------------------------------
+
+                vachaaCard(context),
+              ],
 
               const SizedBox(height: 28),
             ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+// ======================================================
+// SHABD OLKHA SCREEN
+// ======================================================
+
+class ShabdOlkhaScreen extends StatelessWidget {
+  const ShabdOlkhaScreen({super.key});
+
+  final List<String> words = const [
+    "कमळ",
+    "कमल",
+    "माला",
+    "मामा",
+    "काका",
+    "लाल",
+    "आला",
+    "मला",
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "शब्द ओळखा",
+          style: TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+      ),
+
+      body: ListView.builder(
+        padding: const EdgeInsets.all(20),
+
+        itemCount: words.length,
+
+        itemBuilder: (context, index) {
+          final word = words[index];
+
+          return Card(
+            elevation: 4,
+            margin: const EdgeInsets.only(bottom: 14),
+
+            shape: RoundedRectangleBorder(
+              borderRadius:
+                  BorderRadius.circular(16),
+            ),
+
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 18,
+                vertical: 14,
+              ),
+
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      word,
+                      style: const TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+
+                  IconButton(
+                    icon: const Icon(
+                      Icons.volume_up,
+                      size: 32,
+                      color: Colors.green,
+                    ),
+
+                    onPressed: () {
+                      TtsService.speak(word);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+// ======================================================
+// VACHAA SCREEN
+// ======================================================
+
+class VachaaScreen extends StatelessWidget {
+  const VachaaScreen({super.key});
+
+  final List<String> words = const [
+    "काका आला.",
+    "मामा आला.",
+    "लाला आला.",
+    "काका कमळ आण.",
+    "माला लाल कमळ.",
+    "मला कमळ आवडते.",
+    "आला मामा आला.",
+    "कमल आला.",
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "वाचा",
+          style: TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+      ),
+
+      body: ListView.builder(
+        padding: const EdgeInsets.all(20),
+
+        itemCount: words.length,
+
+        itemBuilder: (context, index) {
+          final sentence = words[index];
+
+          return Card(
+            elevation: 4,
+
+            margin: const EdgeInsets.only(
+              bottom: 14,
+            ),
+
+            shape: RoundedRectangleBorder(
+              borderRadius:
+                  BorderRadius.circular(16),
+            ),
+
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 18,
+                vertical: 18,
+              ),
+
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      sentence,
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+
+                  IconButton(
+                    icon: const Icon(
+                      Icons.volume_up,
+                      size: 32,
+                      color: Colors.green,
+                    ),
+
+                    onPressed: () {
+                      TtsService.speak(sentence);
+                    },
+                  ),
+                ],
+              ),
+            ),
           );
         },
       ),
