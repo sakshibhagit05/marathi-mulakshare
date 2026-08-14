@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'tracing_screen.dart';
-import 'vachanpath_1_screen.dart';
 import 'vachanpath_screen.dart';
 import '../services/tts_service.dart';
+import 'shabd_khel_screen.dart';
 
 class MulakshareScreen extends StatelessWidget {
   MulakshareScreen({super.key});
@@ -87,28 +87,123 @@ class MulakshareScreen extends StatelessWidget {
   ];
 
   // ==================================================
-  // LETTER GRID
+  // VACHANPATH DATA 1 TO 9
+  // ==================================================
+
+  final List<List<String>> vachanpathData = [
+    // वाचनपाठ १
+    [
+      "काका आला.",
+      "मामा आला.",
+      "लाला आला.",
+      "काल आलम आला.",
+    ],
+
+    // वाचनपाठ २
+    [
+      "घार आली घार.",
+      "रिमा घार बघ.",
+      "बाबा घार बघा.",
+      "मामा, मामी घार बघा.",
+      "काका, काकी घार बघा.",
+      "बघा बघा घार बघा.",
+    ],
+
+    // वाचनपाठ ३
+    [
+      "आला आला पाऊस आला.",
+      "सरसर सरसर पाऊस आला.",
+      "काका, काकू पाऊस बघा.",
+      "कुमार, पूनम पाऊस बघा.",
+      "आला आला पाऊस आला.",
+    ],
+
+    // वाचनपाठ ४
+    [
+      "सकाळ झाली.",
+      "रतन, रमाने बाहेर पाला पाहिला.",
+      "रमाने पाला सुपलीत उचलला.",
+    ],
+
+    // वाचनपाठ ५
+    [
+      "मुले सहलीला निघाली.",
+      "रवीही सहलीला निघाला.",
+      "आईने लाडू, चिवडा केला.",
+      "चपाती व उसळ केली.",
+      "गरम डबा दिला.",
+      "आवडीची कैरी दिली.",
+      "नगमा आली. वैदेही आली.",
+      "सहलीची बस निघाली.",
+    ],
+
+    // वाचनपाठ ६
+    [
+      "जय व राज दोघे सोबती.",
+      "शाळेतून घरी आले.",
+      "दोघेही बागेत फिरायला गेले.",
+      "फळझाडे व फुलझाडे पाहिली.",
+      "फळे-फुले वेचून घेतली.",
+      "मधाचे पोळे पाहिले.",
+      "मोरही पाहिला.",
+      "आजचा दिवस मजेत गेला.",
+    ],
+
+    // वाचनपाठ ७
+    [
+      "सौरभची आजी जेवण बनवते.",
+      "चवदार भाजी करते.",
+      "मुगाची खिचडी करते.",
+      "पालकची भजी करते.",
+      "नाचणीचे धिरडे करते.",
+      "डाळीचे वडे करते.",
+      "बाजरीची भाकरी खरपूस भाजते.",
+      "रुचकर चवीची थाळी सजते.",
+    ],
+
+    // वाचनपाठ ८
+    [
+      "शिरीषने ठोकळे जमवले.",
+      "काही चौरस काही आयत.",
+      "शिरीषने ढिगातून ठोकळे घेतले.",
+      "छान घर तयार केले. इमारत केली.",
+      "शाळा केली. नागमोडी वाट केली.",
+      "चढ उताराचा घाट केला.",
+      "असे छान ठोकळे रचले.",
+    ],
+
+    // वाचनपाठ ९
+    [
+      "अँना भिलारला गेली. सोबत टॉम होता.",
+      "भिलार म्हणजे पुस्तकांचे गाव.",
+      "गावात होती पुस्तकेच पुस्तके.",
+      "अँनाने एक पुस्तक घेतले.",
+      "पुस्तकात खूप गोष्टी होत्या. छान चित्रे होती.",
+      "अँना वाचू लागली. टॉम ऐकत होता.",
+      "वाचताना तिला मजा आली.",
+      "दोघेही खूश झाले.",
+      "त्यांना भिलार गाव आवडले.",
+    ],
+  ];
+
+  // ==================================================
+  // LETTER GRID + ALL ACTIVITY BOXES
   // ==================================================
 
   Widget letterGrid(
     BuildContext context,
     List<String> letters,
+    int groupIndex,
   ) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: letters.length,
-      gridDelegate:
-          const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 4,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-        childAspectRatio: 0.9,
-      ),
-      itemBuilder: (context, index) {
-        final String letter = letters[index];
+    final List<Widget> items = [];
 
-        return Card(
+    // ==================================================
+    // LETTER BOXES
+    // ==================================================
+
+    for (final letter in letters) {
+      items.add(
+        Card(
           elevation: 5,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
@@ -150,249 +245,249 @@ class MulakshareScreen extends StatelessWidget {
               ],
             ),
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
+    }
 
-  // ==================================================
-  // COMMON ACTIVITY CARD
-  // ==================================================
+    // ==================================================
+    // VACHANPATH BOX
+    // EVERY GROUP
+    // ==================================================
 
-  Widget activityCard(
-    BuildContext context, {
-    required String title,
-    required IconData icon,
-    required Color color,
-    required VoidCallback onPressed,
-  }) {
-    return Center(
-      child: SizedBox(
-        width: 300,
-        child: ElevatedButton.icon(
-          onPressed: onPressed,
-          icon: Icon(
-            icon,
-            size: 28,
-          ),
-          label: Text(
-            title,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 23,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: color,
-            foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 15,
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            elevation: 4,
+    items.add(
+      Card(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(15),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => VachanpathScreen(
+                  pathNumber: groupIndex + 1,
+                  sentences: vachanpathData[groupIndex],
+                ),
+              ),
+            );
+          },
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.menu_book,
+                color: colors[groupIndex],
+                size: 50,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                "वाचनपाठ–${groupIndex + 1}",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 21,
+                  fontWeight: FontWeight.bold,
+                  color: colors[groupIndex],
+                ),
+              ),
+              const SizedBox(height: 5),
+              const Text(
+                "वाचा",
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black54,
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
-  }
 
-  // ==================================================
-  // VACHANPATH 1
-  // GROUP 1
-  // ==================================================
+    // ==================================================
+    // GROUP 1
+    // WORD OLKHA + VACHAA
+    // ==================================================
 
-  Widget vachanpath1Card(BuildContext context) {
-    return activityCard(
-      context,
-      title: "वाचनपाठ–१",
-      icon: Icons.menu_book,
-      color: Colors.pink,
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => const Vachanpath1Screen(),
-          ),
-        );
+    if (groupIndex == 0) {
+      items.add(
+        activityBox(
+          context: context,
+          icon: Icons.extension,
+          title: "शब्द ओळखा",
+          color: Colors.orange,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const ShabdOlkhaScreen(),
+              ),
+            );
+          },
+        ),
+      );
+
+      items.add(
+        activityBox(
+          context: context,
+          icon: Icons.menu_book_outlined,
+          title: "वाचा",
+          color: Colors.green,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const VachaaScreen(),
+              ),
+            );
+          },
+        ),
+      );
+    }
+
+    // ==================================================
+    // GROUP 2
+    // VACH VA LIHI
+    // ==================================================
+
+    if (groupIndex == 1) {
+      items.add(
+        activityBox(
+          context: context,
+          icon: Icons.edit_note,
+          title: "वाच व लिही",
+          color: Colors.deepOrange,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const VachVaLihiScreen(),
+              ),
+            );
+          },
+        ),
+      );
+    }
+
+    // ==================================================
+    // GROUP 6
+    // YOGYA GATATUN LIHI + NEW SHABD KHEL
+    // ==================================================
+
+    if (groupIndex == 5) {
+      // -----------------------------------------------
+      // 1. योग्य गटातून लिही
+      // -----------------------------------------------
+
+      items.add(
+        activityBox(
+          context: context,
+          icon: Icons.edit_note,
+          title: "वाच. योग्य गटातून लिही.",
+          color: Colors.deepOrange,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => YogyaGatatunLihiScreen(),
+              ),
+            );
+          },
+        ),
+      );
+
+      // -----------------------------------------------
+      // 2. NEW शब्दखेळ
+      // -----------------------------------------------
+
+      items.add(
+        activityBox(
+          context: context,
+          icon: Icons.extension,
+          title: "शब्दखेळ (तो, ती, ते)",
+          color: Colors.pink,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const ShabdKhelScreen(),
+              ),
+            );
+          },
+        ),
+      );
+    }
+
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: items.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 4,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+        childAspectRatio: 0.9,
+      ),
+      itemBuilder: (context, index) {
+        return items[index];
       },
     );
   }
 
   // ==================================================
-  // SHABD OLKHA
-  // GROUP 1
+  // ACTIVITY BOX
   // ==================================================
 
-  Widget shabdOlkhaCard(BuildContext context) {
-    return activityCard(
-      context,
-      title: "शब्द ओळखा",
-      icon: Icons.extension,
-      color: Colors.orange,
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => const ShabdOlkhaScreen(),
-          ),
-        );
-      },
-    );
-  }
-
-  // ==================================================
-  // VACHAA
-  // GROUP 1
-  // ==================================================
-
-  Widget vachaaCard(BuildContext context) {
-    return activityCard(
-      context,
-      title: "वाचा",
-      icon: Icons.menu_book_outlined,
-      color: Colors.green,
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => const VachaaScreen(),
-          ),
-        );
-      },
-    );
-  }
-
-  // ==================================================
-  // VACHANPATH 2
-  // GROUP 2
-  // ==================================================
-
-  Widget vachanpath2Card(BuildContext context) {
-    return activityCard(
-      context,
-      title: "वाचनपाठ–२",
-      icon: Icons.menu_book,
-      color: Colors.purple,
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => const VachanpathScreen(
-              pathNumber: 2,
-              sentences: [
-                "रिमा घरी आली.",
-                "कमी किलबिल झाली.",
-                "लीला घरी आली.",
-                "बिरबल आला.",
-              ],
+  Widget activityBox({
+    required BuildContext context,
+    required IconData icon,
+    required String title,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return Card(
+      elevation: 5,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(15),
+        onTap: onTap,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              color: color,
+              size: 50,
             ),
-          ),
-        );
-      },
-    );
-  }
-
-  // ==================================================
-  // VACH VA LIHI
-  // GROUP 2
-  // ==================================================
-
-  Widget vachVaLihiCard(BuildContext context) {
-    return activityCard(
-      context,
-      title: "वाच व लिही",
-      icon: Icons.edit_note,
-      color: Colors.deepOrange,
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => const VachVaLihiScreen(),
-          ),
-        );
-      },
-    );
-  }
-
-  // ==================================================
-  // VACHANPATH 6
-  // GROUP 6
-  // ==================================================
-
-  Widget vachanpath6Card(BuildContext context) {
-    return activityCard(
-      context,
-      title: "वाचनपाठ–६",
-      icon: Icons.menu_book,
-      color: Colors.blue,
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => const VachanpathScreen(
-              pathNumber: 6,
-              sentences: [
-                "जय व राजा दोघे सोबती.",
-                "शाळेतून घरी आले.",
-                "दोघेही बागेत फिरायला गेले.",
-                "फणसझाडे व फुलझाडे पाहिली.",
-                "फळे-फुले वेचून घेतली.",
-                "मधाचे पोळे पाहिले.",
-                "मोरही पाहिला.",
-                "आजचा दिवस मजेत गेला.",
-              ],
+            const SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: color,
+                ),
+              ),
             ),
-          ),
-        );
-      },
-    );
-  }
-
-  // ==================================================
-  // योग्य गटातून लिही
-  // GROUP 6
-  // ==================================================
-
-  Widget yogyaGatLihiCard(BuildContext context) {
-    return activityCard(
-      context,
-      title: "योग्य गटातून लिही",
-      icon: Icons.edit,
-      color: Colors.teal,
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => const YogyaGatLihiScreen(),
-          ),
-        );
-      },
-    );
-  }
-
-  // ==================================================
-  // शब्दखेळ (तो, ती, ते)
-  // GROUP 6
-  // ==================================================
-
-  Widget shabdKhelCard(BuildContext context) {
-    return activityCard(
-      context,
-      title: "शब्दखेळ (तो, ती, ते)",
-      icon: Icons.extension,
-      color: Colors.indigo,
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => const ShabdKhelScreen(),
-          ),
-        );
-      },
+            const SizedBox(height: 5),
+            const Text(
+              "उपक्रम",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.black54,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -415,7 +510,6 @@ class MulakshareScreen extends StatelessWidget {
         backgroundColor: const Color(0xFFFFF7FF),
         elevation: 0,
       ),
-
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: aksharGat.length,
@@ -426,23 +520,20 @@ class MulakshareScreen extends StatelessWidget {
           );
 
           return Column(
-            crossAxisAlignment:
-                CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // ========================================
               // GROUP TITLE
               // ========================================
 
               Container(
-                padding:
-                    const EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                   horizontal: 14,
                   vertical: 9,
                 ),
                 decoration: BoxDecoration(
                   color: colors[index],
-                  borderRadius:
-                      BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
                   aksharGat[index]["title"],
@@ -457,74 +548,14 @@ class MulakshareScreen extends StatelessWidget {
               const SizedBox(height: 12),
 
               // ========================================
-              // LETTER GRID
+              // LETTERS + ACTIVITY BOXES
               // ========================================
 
               letterGrid(
                 context,
                 letters,
+                index,
               ),
-
-              // ========================================
-              // GROUP 1
-              //
-              // वाचनपाठ १
-              // शब्द ओळखा
-              // वाचा
-              // ========================================
-
-              if (index == 0) ...[
-                const SizedBox(height: 18),
-
-                vachanpath1Card(context),
-
-                const SizedBox(height: 12),
-
-                shabdOlkhaCard(context),
-
-                const SizedBox(height: 12),
-
-                vachaaCard(context),
-              ],
-
-              // ========================================
-              // GROUP 2
-              //
-              // वाचनपाठ २
-              // वाच व लिही
-              // ========================================
-
-              if (index == 1) ...[
-                const SizedBox(height: 18),
-
-                vachanpath2Card(context),
-
-                const SizedBox(height: 12),
-
-                vachVaLihiCard(context),
-              ],
-
-              // ========================================
-              // GROUP 6
-              //
-              // वाचनपाठ ६
-              // योग्य गटातून लिही
-              // शब्दखेळ (तो, ती, ते)
-              // ========================================
-
-              if (index == 5) ...[
-                const SizedBox(height: 18),
-
-                vachanpath6Card(context),
-
-                const SizedBox(height: 12),
-
-                yogyaGatLihiCard(context),
-
-                const SizedBox(height: 12),
-
-                shabdKhelCard(context),
-              ],
 
               const SizedBox(height: 28),
             ],
@@ -537,6 +568,7 @@ class MulakshareScreen extends StatelessWidget {
 
 // ======================================================
 // VACH VA LIHI SCREEN
+// GROUP 2
 // ======================================================
 
 class VachVaLihiScreen extends StatelessWidget {
@@ -555,7 +587,6 @@ class VachVaLihiScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFF8FF),
-
       appBar: AppBar(
         title: const Text(
           "वाच व लिही",
@@ -568,22 +599,18 @@ class VachVaLihiScreen extends StatelessWidget {
         backgroundColor: const Color(0xFFFFF0FA),
         elevation: 0,
       ),
-
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
-
         child: Column(
           children: [
             Container(
-              padding:
-                  const EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 25,
                 vertical: 12,
               ),
               decoration: BoxDecoration(
                 color: const Color(0xFFFFE0F3),
-                borderRadius:
-                    BorderRadius.circular(18),
+                borderRadius: BorderRadius.circular(18),
                 border: Border.all(
                   color: Colors.pink,
                   width: 2,
@@ -614,21 +641,18 @@ class VachVaLihiScreen extends StatelessWidget {
 
             ...words.map(
               (word) => Padding(
-                padding:
-                    const EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   bottom: 16,
                 ),
                 child: Container(
                   width: double.infinity,
-                  padding:
-                      const EdgeInsets.symmetric(
+                  padding: const EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 16,
                   ),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius:
-                        BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(15),
                     border: Border.all(
                       color: Colors.orange,
                       width: 2,
@@ -646,19 +670,14 @@ class VachVaLihiScreen extends StatelessWidget {
                       Expanded(
                         child: Text(
                           word,
-                          textAlign:
-                              TextAlign.center,
-                          style:
-                              const TextStyle(
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
                             fontSize: 32,
-                            fontWeight:
-                                FontWeight.bold,
-                            color:
-                                Colors.black87,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
                           ),
                         ),
                       ),
-
                       IconButton(
                         icon: const Icon(
                           Icons.volume_up,
@@ -682,8 +701,7 @@ class VachVaLihiScreen extends StatelessWidget {
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
                 color: const Color(0xFFFFFBEA),
-                borderRadius:
-                    BorderRadius.circular(18),
+                borderRadius: BorderRadius.circular(18),
                 border: Border.all(
                   color: Colors.green,
                   width: 2,
@@ -699,9 +717,7 @@ class VachVaLihiScreen extends StatelessWidget {
                       color: Colors.green,
                     ),
                   ),
-
                   SizedBox(height: 15),
-
                   Text(
                     "रिमा\n"
                     "घरी\n"
@@ -709,8 +725,7 @@ class VachVaLihiScreen extends StatelessWidget {
                     "किलबिल\n"
                     "लीला\n"
                     "बिरबल",
-                    textAlign:
-                        TextAlign.center,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 26,
                       height: 2,
@@ -728,510 +743,8 @@ class VachVaLihiScreen extends StatelessWidget {
 }
 
 // ======================================================
-// योग्य गटातून लिही SCREEN
-// ======================================================
-
-class YogyaGatLihiScreen extends StatelessWidget {
-  const YogyaGatLihiScreen({super.key});
-
-  final List<String> words = const [
-    "तारा",
-    "ससा",
-    "हत्ती",
-    "एरंड",
-    "ऐन",
-    "सागर",
-    "हवा",
-    "तेज",
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor:
-          const Color(0xFFFFF8FF),
-
-      appBar: AppBar(
-        title: const Text(
-          "योग्य गटातून लिही",
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor:
-            const Color(0xFFFFF0FA),
-        elevation: 0,
-      ),
-
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-
-        child: Column(
-          children: [
-            Container(
-              padding:
-                  const EdgeInsets.symmetric(
-                horizontal: 22,
-                vertical: 12,
-              ),
-              decoration: BoxDecoration(
-                color:
-                    const Color(0xFFD8F1E8),
-                borderRadius:
-                    BorderRadius.circular(18),
-                border: Border.all(
-                  color: Colors.teal,
-                  width: 2,
-                ),
-              ),
-              child: const Text(
-                "योग्य गटातून लिही",
-                textAlign:
-                    TextAlign.center,
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight:
-                      FontWeight.bold,
-                  color: Colors.teal,
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 18),
-
-            const Text(
-              "खालील शब्द वाचा आणि योग्य गटात लिहा.",
-              textAlign:
-                  TextAlign.center,
-              style: TextStyle(
-                fontSize: 21,
-                fontWeight:
-                    FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(height: 25),
-
-            ...words.map(
-              (word) => Padding(
-                padding:
-                    const EdgeInsets.only(
-                  bottom: 14,
-                ),
-                child: Container(
-                  width: double.infinity,
-                  padding:
-                      const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 17,
-                  ),
-                  decoration:
-                      BoxDecoration(
-                    color: Colors.white,
-                    borderRadius:
-                        BorderRadius.circular(
-                      15,
-                    ),
-                    border: Border.all(
-                      color: Colors.teal,
-                      width: 2,
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          word,
-                          textAlign:
-                              TextAlign.center,
-                          style:
-                              const TextStyle(
-                            fontSize: 30,
-                            fontWeight:
-                                FontWeight.bold,
-                          ),
-                        ),
-                      ),
-
-                      IconButton(
-                        icon: const Icon(
-                          Icons.volume_up,
-                          color:
-                              Colors.green,
-                          size: 32,
-                        ),
-                        onPressed: () {
-                          TtsService
-                              .speak(word);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 15),
-
-            Container(
-              width: double.infinity,
-              padding:
-                  const EdgeInsets.all(18),
-              decoration: BoxDecoration(
-                color:
-                    const Color(0xFFF0FFFA),
-                borderRadius:
-                    BorderRadius.circular(18),
-                border: Border.all(
-                  color: Colors.teal,
-                  width: 2,
-                ),
-              ),
-              child: const Text(
-                "✏️ शब्द योग्य अक्षर गटाखाली लिहा.",
-                textAlign:
-                    TextAlign.center,
-                style: TextStyle(
-                  fontSize: 21,
-                  fontWeight:
-                      FontWeight.bold,
-                  color: Colors.teal,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// ======================================================
-// शब्दखेळ (तो, ती, ते)
-// ======================================================
-
-class ShabdKhelScreen extends StatelessWidget {
-  const ShabdKhelScreen({super.key});
-
-  final List<Map<String, String>> shabdLekh =
-      const [
-    {
-      "to": "ढगा",
-      "ti": "बहिण",
-      "te": "घर",
-    },
-    {
-      "to": "मामा",
-      "ti": "माई",
-      "te": "कमळ",
-    },
-    {
-      "to": "काका",
-      "ti": "माला",
-      "te": "पान",
-    },
-    {
-      "to": "बाबा",
-      "ti": "रमा",
-      "te": "काम",
-    },
-  ];
-
-  final List<String> shabdKhel = const [
-    "आई",
-    "माई",
-    "घर",
-    "कबीर",
-    "मीरा",
-    "रमा",
-    "काकी",
-    "बाबा",
-    "करा",
-    "माया",
-    "घाम",
-    "मामी",
-    "वय",
-    "घाई",
-    "इरा",
-    "काका",
-    "रमाई",
-    "माला",
-    "बाई",
-    "आली",
-    "काल",
-    "काम",
-    "कमला",
-    "बकरी",
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor:
-          const Color(0xFFFFF8FF),
-
-      appBar: AppBar(
-        title: const Text(
-          "शब्दखेळ (तो, ती, ते)",
-          style: TextStyle(
-            fontSize: 23,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor:
-            const Color(0xFFFFF0FA),
-        elevation: 0,
-      ),
-
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-
-        child: Column(
-          children: [
-            Container(
-              padding:
-                  const EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 11,
-              ),
-              decoration: BoxDecoration(
-                color:
-                    const Color(0xFFFFE0F3),
-                borderRadius:
-                    BorderRadius.circular(16),
-                border: Border.all(
-                  color: Colors.pink,
-                  width: 2,
-                ),
-              ),
-              child: const Text(
-                "शब्दखेळ",
-                style: TextStyle(
-                  fontSize: 29,
-                  fontWeight:
-                      FontWeight.bold,
-                  color: Colors.pink,
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 15),
-
-            const Text(
-              "वाचा व शब्द ओळखा.",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight:
-                    FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(height: 15),
-
-            Container(
-              padding:
-                  const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color:
-                    const Color(0xFFFFFBEA),
-                borderRadius:
-                    BorderRadius.circular(18),
-                border: Border.all(
-                  color: Colors.pinkAccent,
-                  width: 2,
-                ),
-              ),
-              child: GridView.builder(
-                shrinkWrap: true,
-                physics:
-                    const NeverScrollableScrollPhysics(),
-                itemCount:
-                    shabdKhel.length,
-                gridDelegate:
-                    const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 4,
-                  crossAxisSpacing: 5,
-                  mainAxisSpacing: 5,
-                  childAspectRatio: 1.45,
-                ),
-                itemBuilder:
-                    (context, index) {
-                  final word =
-                      shabdKhel[index];
-
-                  return InkWell(
-                    borderRadius:
-                        BorderRadius.circular(
-                      8,
-                    ),
-                    onTap: () {
-                      TtsService
-                          .speak(word);
-                    },
-                    child: Container(
-                      alignment:
-                          Alignment.center,
-                      decoration:
-                          BoxDecoration(
-                        color: index % 2 == 0
-                            ? const Color(
-                                0xFFFFE7A8,
-                              )
-                            : const Color(
-                                0xFFD8F1E8,
-                              ),
-                        borderRadius:
-                            BorderRadius
-                                .circular(8),
-                        border: Border.all(
-                          color:
-                              Colors.black26,
-                        ),
-                      ),
-                      child: Text(
-                        word,
-                        textAlign:
-                            TextAlign.center,
-                        style:
-                            const TextStyle(
-                          fontSize: 21,
-                          fontWeight:
-                              FontWeight.bold,
-                          color:
-                              Colors.black87,
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            const SizedBox(height: 30),
-
-            Container(
-              padding:
-                  const EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 10,
-              ),
-              decoration: BoxDecoration(
-                color:
-                    const Color(0xFFFFE0F3),
-                borderRadius:
-                    BorderRadius.circular(15),
-                border: Border.all(
-                  color: Colors.pink,
-                  width: 2,
-                ),
-              ),
-              child: const Text(
-                "शब्दलेख (तो, ती, ते)",
-                textAlign:
-                    TextAlign.center,
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight:
-                      FontWeight.bold,
-                  color: Colors.pink,
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 15),
-
-            const Text(
-              "वाचा. योग्य गटात लिहा.",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight:
-                    FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(height: 15),
-
-            Container(
-              decoration:
-                  BoxDecoration(
-                color: Colors.white,
-                border: Border.all(
-                  color: Colors.pink,
-                  width: 2,
-                ),
-                borderRadius:
-                    BorderRadius.circular(10),
-              ),
-              child: Table(
-                border:
-                    TableBorder.all(
-                  color: Colors.pink,
-                  width: 1,
-                ),
-                columnWidths: const {
-                  0: FlexColumnWidth(1),
-                  1: FlexColumnWidth(1),
-                  2: FlexColumnWidth(1),
-                },
-                children: [
-                  const TableRow(
-                    children: [
-                      _TableCell(
-                        text: "तो",
-                        header: true,
-                      ),
-                      _TableCell(
-                        text: "ती",
-                        header: true,
-                      ),
-                      _TableCell(
-                        text: "ते",
-                        header: true,
-                      ),
-                    ],
-                  ),
-                  ...shabdLekh.map(
-                    (row) => TableRow(
-                      children: [
-                        _TableCell(
-                          text: row["to"]!,
-                        ),
-                        _TableCell(
-                          text: row["ti"]!,
-                        ),
-                        _TableCell(
-                          text: row["te"]!,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            const Text(
-              "🔊 शब्दावर टॅप करा आणि ऐका.",
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.green,
-                fontWeight:
-                    FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// ======================================================
 // SHABD OLKHA SCREEN
+// GROUP 1
 // ======================================================
 
 class ShabdOlkhaScreen extends StatelessWidget {
@@ -1265,7 +778,6 @@ class ShabdOlkhaScreen extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-
       body: ListView.builder(
         padding: const EdgeInsets.all(20),
         itemCount: words.length,
@@ -1274,18 +786,12 @@ class ShabdOlkhaScreen extends StatelessWidget {
 
           return Card(
             elevation: 4,
-            margin:
-                const EdgeInsets.only(
-              bottom: 14,
-            ),
-            shape:
-                RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.circular(16),
+            margin: const EdgeInsets.only(bottom: 14),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
             ),
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 18,
                 vertical: 14,
               ),
@@ -1294,15 +800,12 @@ class ShabdOlkhaScreen extends StatelessWidget {
                   Expanded(
                     child: Text(
                       word,
-                      style:
-                          const TextStyle(
+                      style: const TextStyle(
                         fontSize: 32,
-                        fontWeight:
-                            FontWeight.bold,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-
                   IconButton(
                     icon: const Icon(
                       Icons.volume_up,
@@ -1310,8 +813,7 @@ class ShabdOlkhaScreen extends StatelessWidget {
                       color: Colors.green,
                     ),
                     onPressed: () {
-                      TtsService
-                          .speak(word);
+                      TtsService.speak(word);
                     },
                   ),
                 ],
@@ -1326,6 +828,7 @@ class ShabdOlkhaScreen extends StatelessWidget {
 
 // ======================================================
 // VACHAA SCREEN
+// GROUP 1
 // ======================================================
 
 class VachaaScreen extends StatelessWidget {
@@ -1355,7 +858,6 @@ class VachaaScreen extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-
       body: ListView.builder(
         padding: const EdgeInsets.all(20),
         itemCount: words.length,
@@ -1364,18 +866,12 @@ class VachaaScreen extends StatelessWidget {
 
           return Card(
             elevation: 4,
-            margin:
-                const EdgeInsets.only(
-              bottom: 14,
-            ),
-            shape:
-                RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.circular(16),
+            margin: const EdgeInsets.only(bottom: 14),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
             ),
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 18,
                 vertical: 18,
               ),
@@ -1384,15 +880,12 @@ class VachaaScreen extends StatelessWidget {
                   Expanded(
                     child: Text(
                       sentence,
-                      style:
-                          const TextStyle(
+                      style: const TextStyle(
                         fontSize: 28,
-                        fontWeight:
-                            FontWeight.bold,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-
                   IconButton(
                     icon: const Icon(
                       Icons.volume_up,
@@ -1400,8 +893,7 @@ class VachaaScreen extends StatelessWidget {
                       color: Colors.green,
                     ),
                     onPressed: () {
-                      TtsService
-                          .speak(sentence);
+                      TtsService.speak(sentence);
                     },
                   ),
                 ],
@@ -1415,45 +907,138 @@ class VachaaScreen extends StatelessWidget {
 }
 
 // ======================================================
-// TABLE CELL
+// YOGYA GATATUN LIHI SCREEN
+// GROUP 6
 // ======================================================
 
-class _TableCell extends StatelessWidget {
-  final String text;
-  final bool header;
+class YogyaGatatunLihiScreen extends StatelessWidget {
+  YogyaGatatunLihiScreen({super.key});
 
-  const _TableCell({
-    required this.text,
-    this.header = false,
-  });
+  final List<String> words = [
+    "मोर",
+    "मोरनी",
+    "घर",
+    "शाळा",
+    "बाग",
+    "फळ",
+    "फूल",
+    "राजा",
+    "राणी",
+    "मुलगा",
+    "मुलगी",
+    "झाड",
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        TtsService.speak(text);
-      },
-      child: Container(
-        padding:
-            const EdgeInsets.symmetric(
-          vertical: 12,
-          horizontal: 5,
-        ),
-        color: header
-            ? const Color(0xFFFFE8F5)
-            : Colors.white,
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
+    return Scaffold(
+      backgroundColor: const Color(0xFFFFF8FF),
+      appBar: AppBar(
+        title: const Text(
+          "वाच. योग्य गटातून लिही.",
           style: TextStyle(
-            fontSize: header ? 24 : 20,
-            fontWeight: header
-                ? FontWeight.bold
-                : FontWeight.w600,
-            color: header
-                ? Colors.pink
-                : Colors.black87,
+            fontSize: 23,
+            fontWeight: FontWeight.bold,
           ),
+        ),
+        centerTitle: true,
+        backgroundColor: const Color(0xFFFFF0FA),
+        elevation: 0,
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 12,
+              ),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFE0F3),
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(
+                  color: Colors.deepOrange,
+                  width: 2,
+                ),
+              ),
+              child: const Text(
+                "वाच. योग्य गटातून लिही.",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 27,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepOrange,
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            const Text(
+              "खालील शब्द वाचा.",
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: words.length,
+              gridDelegate:
+                  const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 1.5,
+              ),
+              itemBuilder: (context, index) {
+                final word = words[index];
+
+                return InkWell(
+                  borderRadius: BorderRadius.circular(12),
+                  onTap: () {
+                    TtsService.speak(word);
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: index % 2 == 0
+                          ? const Color(0xFFFFE7A8)
+                          : const Color(0xFFD8F1E8),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: Colors.black26,
+                      ),
+                    ),
+                    child: Text(
+                      word,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+
+            const SizedBox(height: 25),
+
+            const Text(
+              "🔊 शब्दावर टॅप करा आणि ऐका.",
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.green,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
       ),
     );

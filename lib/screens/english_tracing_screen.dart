@@ -56,7 +56,7 @@ class _EnglishTracingScreenState
     }
 
     final String nextLetter =
-        widget.groupLetters[currentIndex + 1];
+        widget.groupLetters[currentIndex + 1].toString();
 
     Navigator.pushReplacement(
       context,
@@ -119,9 +119,9 @@ class _EnglishTracingScreenState
         elevation: 0,
         automaticallyImplyLeading: false,
 
-        // -------------------------------
+        // -----------------------------------------------
         // BACK BUTTON
-        // -------------------------------
+        // -----------------------------------------------
 
         leading: IconButton(
           onPressed: goBack,
@@ -132,9 +132,9 @@ class _EnglishTracingScreenState
           ),
         ),
 
-        // -------------------------------
+        // -----------------------------------------------
         // TITLE
-        // -------------------------------
+        // -----------------------------------------------
 
         title: Text(
           widget.letter,
@@ -147,11 +147,12 @@ class _EnglishTracingScreenState
 
         centerTitle: true,
 
-        // -------------------------------
+        // -----------------------------------------------
         // NEXT + SOUND
-        // -------------------------------
+        // -----------------------------------------------
 
         actions: [
+
           // NEXT BUTTON
           if (hasNextLetter)
             TextButton(
@@ -223,53 +224,54 @@ class _EnglishTracingScreenState
                   child: LayoutBuilder(
                     builder: (context, constraints) {
 
-                      // Leave a very small margin
                       final double availableWidth =
                           constraints.maxWidth - 8;
 
                       final double availableHeight =
                           constraints.maxHeight - 8;
 
-                      // Use the largest square that fits
+                      // -----------------------------------
+                      // LARGEST SQUARE THAT FITS
+                      // -----------------------------------
+
                       double tracingSize =
                           availableWidth < availableHeight
                               ? availableWidth
                               : availableHeight;
 
-                      // ==================================
+                      // -----------------------------------
                       // MOBILE
-                      // ==================================
+                      // -----------------------------------
 
                       if (screenWidth < 600) {
-                        tracingSize =
-                            tracingSize.clamp(
+                        tracingSize = tracingSize.clamp(
                           280.0,
                           520.0,
                         );
                       }
 
-                      // ==================================
+                      // -----------------------------------
                       // DESKTOP / TABLET
-                      // ==================================
+                      // -----------------------------------
 
                       else {
-                        tracingSize =
-                            tracingSize.clamp(
+                        tracingSize = tracingSize.clamp(
                           350.0,
                           680.0,
                         );
                       }
 
-                      // Make absolutely sure it fits
-                      tracingSize =
-                          tracingSize > availableWidth
-                              ? availableWidth
-                              : tracingSize;
+                      // -----------------------------------
+                      // MAKE SURE IT FITS
+                      // -----------------------------------
 
-                      tracingSize =
-                          tracingSize > availableHeight
-                              ? availableHeight
-                              : tracingSize;
+                      if (tracingSize > availableWidth) {
+                        tracingSize = availableWidth;
+                      }
+
+                      if (tracingSize > availableHeight) {
+                        tracingSize = availableHeight;
+                      }
 
                       return Center(
                         child: Stack(
@@ -301,37 +303,29 @@ class _EnglishTracingScreenState
                                 child: hasSvg
 
                                     // =================================
-                                    // MAXIMUM SAFE SVG LETTER
+                                    // SVG LETTER
                                     // =================================
 
                                     ? DashedLetter(
                                         svgFile:
                                             "english/$svg",
-
-                                        // Almost the entire
-                                        // tracing paper.
                                         size:
                                             tracingSize * 0.99,
                                       )
 
                                     // =================================
-                                    // LARGE NUMBER
+                                    // FALLBACK
                                     // =================================
 
                                     : Text(
                                         widget.letter,
-
                                         style: TextStyle(
                                           fontSize:
-                                              tracingSize *
-                                                  0.85,
-
+                                              tracingSize * 0.85,
                                           fontWeight:
                                               FontWeight.bold,
-
-                                          color: Colors
-                                              .grey
-                                              .shade300,
+                                          color:
+                                              Colors.grey.shade300,
                                         ),
                                       ),
                               ),
