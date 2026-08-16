@@ -14,10 +14,12 @@ class DrawingBoard extends StatefulWidget {
 class DrawingStroke {
   final List<Offset?> points;
   final Color color;
+  final double strokeWidth;
 
   DrawingStroke({
     required this.points,
     required this.color,
+    required this.strokeWidth,
   });
 }
 
@@ -30,10 +32,19 @@ class _DrawingBoardState extends State<DrawingBoard> {
 
   Color selectedColor = Colors.blue;
 
+  // =====================================================
+  // PEN SIZE
+  // =====================================================
+
+  double penSize = 9.0;
+
+  static const double minPenSize = 3.0;
+  static const double maxPenSize = 25.0;
+
   List<Offset?>? currentPoints;
 
   // =====================================================
-  // UNDO - REMOVE LAST STROKE
+  // UNDO
   // =====================================================
 
   void undo() {
@@ -47,7 +58,7 @@ class _DrawingBoardState extends State<DrawingBoard> {
   }
 
   // =====================================================
-  // CLEAR - REMOVE EVERYTHING
+  // CLEAR
   // =====================================================
 
   void clear() {
@@ -82,9 +93,7 @@ class _DrawingBoardState extends State<DrawingBoard> {
           color: color,
           shape: BoxShape.circle,
           border: Border.all(
-            color: isSelected
-                ? Colors.white
-                : Colors.black,
+            color: isSelected ? Colors.white : Colors.black,
             width: 3,
           ),
           boxShadow: const [
@@ -96,6 +105,28 @@ class _DrawingBoardState extends State<DrawingBoard> {
         ),
       ),
     );
+  }
+
+  // =====================================================
+  // PEN SIZE - DECREASE
+  // =====================================================
+
+  void decreasePenSize() {
+    setState(() {
+      penSize =
+          (penSize - 1).clamp(minPenSize, maxPenSize);
+    });
+  }
+
+  // =====================================================
+  // PEN SIZE - INCREASE
+  // =====================================================
+
+  void increasePenSize() {
+    setState(() {
+      penSize =
+          (penSize + 1).clamp(minPenSize, maxPenSize);
+    });
   }
 
   // =====================================================
@@ -178,6 +209,7 @@ class _DrawingBoardState extends State<DrawingBoard> {
                       currentPoints!,
                     ),
                     color: selectedColor,
+                    strokeWidth: penSize,
                   ),
                 );
 
@@ -194,6 +226,7 @@ class _DrawingBoardState extends State<DrawingBoard> {
                 strokes: strokes,
                 currentPoints: currentPoints,
                 currentColor: selectedColor,
+                currentStrokeWidth: penSize,
               ),
               child: Container(),
             ),
@@ -240,6 +273,137 @@ class _DrawingBoardState extends State<DrawingBoard> {
                   colorButton(Colors.purple),
                   colorButton(Colors.brown),
                   colorButton(Colors.black),
+
+                  const SizedBox(width: 8),
+
+                  Container(
+                    width: 1,
+                    height: 35,
+                    color: Colors.grey.shade300,
+                  ),
+
+                  const SizedBox(width: 10),
+
+                  // =================================================
+                  // PEN SIZE LABEL
+                  // =================================================
+
+                  const Icon(
+                    Icons.edit,
+                    size: 25,
+                    color: Colors.black87,
+                  ),
+
+                  const SizedBox(width: 5),
+
+                  const Text(
+                    "Pen",
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  const SizedBox(width: 5),
+
+                  // =================================================
+                  // DECREASE SIZE
+                  // =================================================
+
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: penSize <= minPenSize
+                          ? null
+                          : decreasePenSize,
+                      borderRadius:
+                          BorderRadius.circular(30),
+                      child: Padding(
+                        padding:
+                            const EdgeInsets.all(5),
+                        child: Icon(
+                          Icons.remove_circle_outline,
+                          size: 30,
+                          color: penSize <= minPenSize
+                              ? Colors.grey
+                              : Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // =================================================
+                  // SIZE SLIDER
+                  // =================================================
+
+                  SizedBox(
+                    width: 120,
+                    child: Slider(
+                      value: penSize,
+                      min: minPenSize,
+                      max: maxPenSize,
+                      divisions: 22,
+                      label:
+                          penSize.toStringAsFixed(0),
+                      onChanged: (value) {
+                        setState(() {
+                          penSize = value;
+                        });
+                      },
+                    ),
+                  ),
+
+                  // =================================================
+                  // INCREASE SIZE
+                  // =================================================
+
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: penSize >= maxPenSize
+                          ? null
+                          : increasePenSize,
+                      borderRadius:
+                          BorderRadius.circular(30),
+                      child: Padding(
+                        padding:
+                            const EdgeInsets.all(5),
+                        child: Icon(
+                          Icons.add_circle_outline,
+                          size: 30,
+                          color: penSize >= maxPenSize
+                              ? Colors.grey
+                              : Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(width: 8),
+
+                  // =================================================
+                  // CURRENT SIZE
+                  // =================================================
+
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 5,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                      borderRadius:
+                          BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      penSize.toStringAsFixed(0),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
 
                   const SizedBox(width: 8),
 
@@ -322,11 +486,13 @@ class DrawPainter extends CustomPainter {
   final List<DrawingStroke> strokes;
   final List<Offset?>? currentPoints;
   final Color currentColor;
+  final double currentStrokeWidth;
 
   DrawPainter({
     required this.strokes,
     required this.currentPoints,
     required this.currentColor,
+    required this.currentStrokeWidth,
   });
 
   // =====================================================
@@ -337,6 +503,7 @@ class DrawPainter extends CustomPainter {
     Canvas canvas,
     List<Offset?> points,
     Color color,
+    double strokeWidth,
   ) {
     if (points.length < 2) {
       return;
@@ -344,12 +511,14 @@ class DrawPainter extends CustomPainter {
 
     final Paint paint = Paint()
       ..color = color
-      ..strokeWidth = 9
+      ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round
       ..style = PaintingStyle.stroke;
 
-    for (int i = 0; i < points.length - 1; i++) {
+    for (int i = 0;
+        i < points.length - 1;
+        i++) {
       if (points[i] != null &&
           points[i + 1] != null) {
         canvas.drawLine(
@@ -370,21 +539,23 @@ class DrawPainter extends CustomPainter {
     Canvas canvas,
     Size size,
   ) {
-    // Draw all completed strokes
+    // Draw completed strokes
     for (final stroke in strokes) {
       drawStroke(
         canvas,
         stroke.points,
         stroke.color,
+        stroke.strokeWidth,
       );
     }
 
-    // Draw current stroke while finger is moving
+    // Draw current stroke
     if (currentPoints != null) {
       drawStroke(
         canvas,
         currentPoints!,
         currentColor,
+        currentStrokeWidth,
       );
     }
   }

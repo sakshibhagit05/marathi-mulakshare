@@ -1,0 +1,230 @@
+from pathlib import Path
+
+# ============================================================
+# THIPKE / ACTIVITY SVG GENERATOR
+# Creates 10 separate SVG files directly in:
+# assets/svg/
+# ============================================================
+
+OUTPUT_DIR = Path(r"C:\Users\saksh\Downloads\marathi_mulakshare\assets\svg")
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+
+def save_svg(number, content):
+    file_path = OUTPUT_DIR / f"thipke_{number}.svg"
+
+    svg = f'''<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="500"
+     height="500"
+     viewBox="0 0 500 500">
+
+{content}
+
+</svg>
+'''
+
+    file_path.write_text(svg, encoding="utf-8")
+    print(f"✅ Created: {file_path}")
+
+
+# ============================================================
+# 1 - DOTS JOIN : STRAIGHT LINE
+# ============================================================
+
+save_svg(1, r'''
+<g fill="white" stroke="black" stroke-width="4">
+    <circle cx="100" cy="100" r="10"/>
+    <circle cx="200" cy="200" r="10"/>
+    <circle cx="300" cy="300" r="10"/>
+    <circle cx="400" cy="400" r="10"/>
+</g>
+''')
+
+
+# ============================================================
+# 2 - DOTS JOIN : SQUARE
+# ============================================================
+
+save_svg(2, r'''
+<g fill="white" stroke="black" stroke-width="4">
+    <circle cx="120" cy="120" r="10"/>
+    <circle cx="380" cy="120" r="10"/>
+    <circle cx="380" cy="380" r="10"/>
+    <circle cx="120" cy="380" r="10"/>
+</g>
+''')
+
+
+# ============================================================
+# 3 - DOTS JOIN : TRIANGLE
+# ============================================================
+
+save_svg(3, r'''
+<g fill="white" stroke="black" stroke-width="4">
+    <circle cx="250" cy="80" r="10"/>
+    <circle cx="120" cy="360" r="10"/>
+    <circle cx="380" cy="360" r="10"/>
+</g>
+''')
+
+
+# ============================================================
+# 4 - DOTS JOIN : DIAMOND
+# ============================================================
+
+save_svg(4, r'''
+<g fill="white" stroke="black" stroke-width="4">
+    <circle cx="250" cy="70" r="10"/>
+    <circle cx="420" cy="250" r="10"/>
+    <circle cx="250" cy="430" r="10"/>
+    <circle cx="80" cy="250" r="10"/>
+</g>
+''')
+
+
+# ============================================================
+# 5 - DOTS JOIN : ZIGZAG
+# ============================================================
+
+save_svg(5, r'''
+<g fill="white" stroke="black" stroke-width="4">
+    <circle cx="80" cy="100" r="10"/>
+    <circle cx="180" cy="300" r="10"/>
+    <circle cx="280" cy="100" r="10"/>
+    <circle cx="380" cy="300" r="10"/>
+</g>
+''')
+
+
+# ============================================================
+# 6 - MATCH : LEFT SIDE
+# ============================================================
+
+save_svg(6, r'''
+<g fill="white" stroke="black" stroke-width="4">
+    <circle cx="100" cy="100" r="12"/>
+    <circle cx="100" cy="200" r="12"/>
+    <circle cx="100" cy="300" r="12"/>
+    <circle cx="100" cy="400" r="12"/>
+</g>
+
+<g fill="white" stroke="black" stroke-width="4">
+    <circle cx="400" cy="100" r="12"/>
+    <circle cx="400" cy="200" r="12"/>
+    <circle cx="400" cy="300" r="12"/>
+    <circle cx="400" cy="400" r="12"/>
+</g>
+''')
+
+
+# ============================================================
+# 7 - MATCH : SHAPES
+# ============================================================
+
+save_svg(7, r'''
+<g stroke="black" stroke-width="4" fill="white">
+
+    <circle cx="130" cy="130" r="45"/>
+
+    <rect x="325" y="85"
+          width="90"
+          height="90"
+          rx="5"/>
+
+    <path d="M130 370 L80 450 L180 450 Z"/>
+
+    <path d="M370 320
+             L420 370
+             L370 420
+             L320 370 Z"/>
+
+</g>
+''')
+
+
+# ============================================================
+# 8 - MATCH : SIMPLE OBJECTS
+# ============================================================
+
+save_svg(8, r'''
+<g stroke="black" stroke-width="4" fill="white">
+
+    <!-- Sun -->
+    <circle cx="120" cy="130" r="35"/>
+    <line x1="120" y1="70" x2="120" y2="40"/>
+    <line x1="120" y1="190" x2="120" y2="220"/>
+    <line x1="60" y1="130" x2="30" y2="130"/>
+    <line x1="180" y1="130" x2="210" y2="130"/>
+
+    <!-- House -->
+    <path d="M300 180 L370 110 L440 180"/>
+    <rect x="320" y="180" width="100" height="100"/>
+    <rect x="355" y="220" width="30" height="60"/>
+
+    <!-- Tree -->
+    <rect x="105" y="350" width="35" height="90"/>
+    <circle cx="122" cy="330" r="55"/>
+
+    <!-- Flower -->
+    <circle cx="370" cy="370" r="18"/>
+    <circle cx="370" cy="325" r="25"/>
+    <circle cx="370" cy="415" r="25"/>
+    <circle cx="325" cy="370" r="25"/>
+    <circle cx="415" cy="370" r="25"/>
+
+</g>
+''')
+
+
+# ============================================================
+# 9 - JOIN DOTS : CURVED PATH
+# ============================================================
+
+save_svg(9, r'''
+<g fill="white" stroke="black" stroke-width="4">
+    <circle cx="80" cy="250" r="10"/>
+    <circle cx="150" cy="150" r="10"/>
+    <circle cx="250" cy="100" r="10"/>
+    <circle cx="350" cy="150" r="10"/>
+    <circle cx="420" cy="250" r="10"/>
+    <circle cx="350" cy="350" r="10"/>
+    <circle cx="250" cy="400" r="10"/>
+    <circle cx="150" cy="350" r="10"/>
+</g>
+''')
+
+
+# ============================================================
+# 10 - MATCH : BIG DOT PATTERN
+# ============================================================
+
+save_svg(10, r'''
+<g fill="white" stroke="black" stroke-width="4">
+
+    <circle cx="100" cy="100" r="12"/>
+    <circle cx="200" cy="200" r="12"/>
+    <circle cx="100" cy="300" r="12"/>
+    <circle cx="200" cy="400" r="12"/>
+
+    <circle cx="400" cy="100" r="12"/>
+    <circle cx="300" cy="200" r="12"/>
+    <circle cx="400" cy="300" r="12"/>
+    <circle cx="300" cy="400" r="12"/>
+
+</g>
+''')
+
+
+print()
+print("==============================================")
+print("        ✅ 10 SVG FILES CREATED")
+print("==============================================")
+print()
+print("Location:")
+print(OUTPUT_DIR)
+print()
+for i in range(1, 11):
+    print(f"thipke_{i}.svg")
+print()
+print("==============================================")

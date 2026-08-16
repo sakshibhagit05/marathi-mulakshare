@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'tracing_screen.dart';
 import 'vachanpath_screen.dart';
@@ -174,12 +175,12 @@ class MulakshareScreen extends StatelessWidget {
 
     // वाचनपाठ ९
     [
-      "अँना भिलारला गेली. सोबत टॉम होता.",
+      "ॲना भिलारला गेली. सोबत टॉम होता.",
       "भिलार म्हणजे पुस्तकांचे गाव.",
       "गावात होती पुस्तकेच पुस्तके.",
-      "अँनाने एक पुस्तक घेतले.",
+      "ॲनाने एक पुस्तक घेतले.",
       "पुस्तकात खूप गोष्टी होत्या. छान चित्रे होती.",
-      "अँना वाचू लागली. टॉम ऐकत होता.",
+      "ॲना वाचू लागली. टॉम ऐकत होता.",
       "वाचताना तिला मजा आली.",
       "दोघेही खूश झाले.",
       "त्यांना भिलार गाव आवडले.",
@@ -373,13 +374,11 @@ class MulakshareScreen extends StatelessWidget {
 
     // ==================================================
     // GROUP 6
-    // YOGYA GATATUN LIHI + NEW SHABD KHEL
+    // YOGYA GATATUN LIHI + SHABD KHEL
     // ==================================================
 
     if (groupIndex == 5) {
-      // -----------------------------------------------
-      // 1. योग्य गटातून लिही
-      // -----------------------------------------------
+      // योग्य गटातून लिही
 
       items.add(
         activityBox(
@@ -398,9 +397,7 @@ class MulakshareScreen extends StatelessWidget {
         ),
       );
 
-      // -----------------------------------------------
-      // 2. NEW शब्दखेळ
-      // -----------------------------------------------
+      // शब्दखेळ
 
       items.add(
         activityBox(
@@ -419,6 +416,11 @@ class MulakshareScreen extends StatelessWidget {
         ),
       );
     }
+
+    // ==================================================
+    // IMPORTANT:
+    // "टिपके जोड व गिरव" CARD REMOVED
+    // ==================================================
 
     return GridView.builder(
       shrinkWrap: true,
@@ -515,9 +517,7 @@ class MulakshareScreen extends StatelessWidget {
         itemCount: aksharGat.length,
         itemBuilder: (context, index) {
           final List<String> letters =
-              List<String>.from(
-            aksharGat[index]["letters"],
-          );
+              List<String>.from(aksharGat[index]["letters"]);
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1038,6 +1038,128 @@ class YogyaGatatunLihiScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ======================================================
+// TIPKE JOD VA GIRAV SCREEN
+// ======================================================
+// हा screen ठेवला आहे.
+// पण MulakshareScreen मध्ये याचा CARD काढलेला आहे.
+// ======================================================
+
+class ThipkeJodGiravScreen extends StatelessWidget {
+  const ThipkeJodGiravScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFFFF8FF),
+
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+            size: 30,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: const Text(
+          "टिपके जोड व गिरव",
+          style: TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: const Color(0xFFFFF0FA),
+        elevation: 0,
+      ),
+
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 20,
+        ),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 25,
+                vertical: 12,
+              ),
+              decoration: BoxDecoration(
+                color: const Color(0xFFE8D8FF),
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(
+                  color: Colors.purple,
+                  width: 2,
+                ),
+              ),
+              child: const Text(
+                "टिपके जोड व गिरव",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.purple,
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 25),
+
+            // FIRST SVG
+
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(
+                  color: Colors.pink,
+                  width: 2,
+                ),
+              ),
+              child: SvgPicture.asset(
+                "assets/images/thipke_1.svg",
+                width: double.infinity,
+                fit: BoxFit.contain,
+              ),
+            ),
+
+            const SizedBox(height: 25),
+
+            // SECOND SVG
+
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(
+                  color: Colors.purple,
+                  width: 2,
+                ),
+              ),
+              child: SvgPicture.asset(
+                "assets/images/thipke_2.svg",
+                width: double.infinity,
+                fit: BoxFit.contain,
+              ),
+            ),
+
+            const SizedBox(height: 25),
           ],
         ),
       ),

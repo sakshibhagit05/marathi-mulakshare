@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
-import '../services/tts_service.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-class VachanpathScreen extends StatelessWidget {
-  final int pathNumber;
-  final List<String> sentences;
-
-  const VachanpathScreen({
-    super.key,
-    required this.pathNumber,
-    required this.sentences,
-  });
+class ThipkeJodGiravScreen extends StatelessWidget {
+  const ThipkeJodGiravScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +21,9 @@ class VachanpathScreen extends StatelessWidget {
           },
         ),
 
-        title: Text(
-          "वाचनपाठ–$pathNumber",
-          style: const TextStyle(
+        title: const Text(
+          "ठिपके जोड व गिरव",
+          style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
             color: Colors.black,
@@ -45,7 +38,7 @@ class VachanpathScreen extends StatelessWidget {
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(
           horizontal: 20,
-          vertical: 30,
+          vertical: 25,
         ),
 
         child: Column(
@@ -57,57 +50,68 @@ class VachanpathScreen extends StatelessWidget {
 
             Container(
               padding: const EdgeInsets.symmetric(
-                horizontal: 28,
+                horizontal: 25,
                 vertical: 12,
               ),
 
               decoration: BoxDecoration(
-                color: const Color(0xFFFFE4F1),
+                color: const Color(0xFFE8D7FF),
                 borderRadius: BorderRadius.circular(20),
-
                 border: Border.all(
-                  color: Colors.pink,
+                  color: Colors.purple,
                   width: 2,
                 ),
               ),
 
-              child: Text(
-                "वाचनपाठ–$pathNumber",
+              child: const Text(
+                "ठिपके जोड व गिरव",
                 textAlign: TextAlign.center,
 
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
-                  color: Colors.pink,
+                  color: Colors.purple,
                 ),
               ),
             ),
 
-            const SizedBox(height: 35),
+            const SizedBox(height: 25),
 
             // =================================================
-            // READING SENTENCES
+            // FIRST SVG
             // =================================================
 
-            ...sentences.map(
-              (sentence) => Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 20,
-                ),
+            Container(
+              width: double.infinity,
 
-                child: Align(
-                  alignment: Alignment.centerLeft,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+              ),
 
-                  child: Text(
-                    sentence,
-                    style: const TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black87,
-                      height: 1.4,
-                    ),
-                  ),
-                ),
+              child: SvgPicture.asset(
+                'assets/images/thipke_1.svg',
+                fit: BoxFit.contain,
+              ),
+            ),
+
+            const SizedBox(height: 25),
+
+            // =================================================
+            // SECOND SVG
+            // =================================================
+
+            Container(
+              width: double.infinity,
+
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+              ),
+
+              child: SvgPicture.asset(
+                'assets/images/thipke_2.svg',
+                fit: BoxFit.contain,
               ),
             ),
 
